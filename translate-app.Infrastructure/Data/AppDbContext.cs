@@ -1,13 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace translate_app_api.Data
+namespace translate_app.Infrastructure.Data
 {
     public class AppDbContext(DbContextOptions<AppDbContext> options): DbContext(options) 
     {
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-            => modelBuilder.ApplyConfigurationsFromAssembly(typeof(Program).Assembly);
+            => modelBuilder.ApplyConfigurationsFromAssembly(typeof(DependencyInjection).Assembly);
     }
 
 }

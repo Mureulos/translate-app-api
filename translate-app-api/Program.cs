@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using translate_app_api.Data;
+using translate_app.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -17,9 +17,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
-{
     app.MapOpenApi();
-}
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
