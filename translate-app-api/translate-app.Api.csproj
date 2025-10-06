@@ -1,10 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>translate_app_api</RootNamespace>
+    <RootNamespace>translate_app.Api</RootNamespace>
+    <UserSecretsId>c841e0c7-6720-4940-878d-b743b01b261c</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -41,6 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\translate-app.application\translate-app.Application.csproj" />
     <ProjectReference Include="..\translate-app.Infrastructure\translate-app.Infrastructure.csproj" />
   </ItemGroup>
 
