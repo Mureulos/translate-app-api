@@ -8,7 +8,7 @@ using translate_app.Domain.Repositories;
 
 namespace translate_app.Domain.Repositories
 {
-    public interface ITranslationRepository : IRepository<TranslationModel>
+    public interface ITranslationRepository : IRepository<TranslationRequest>
     {
     }
 }
