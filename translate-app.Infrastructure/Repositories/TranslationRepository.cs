@@ -16,7 +16,7 @@ namespace translate_app.Infrastructure.Repositories
 {
     public class TranslationRepository(AppDbContext context) : ITranslationRepository
     {
-        public Task<string> GetTranslationAsync(string text, string targetLanguage, string? sourceLanguage)
+        public Task<string> GetTranslationAsync(string text, string TargetLanguage, string? SourceLanguage)
         {
             throw new NotImplementedException();
         }

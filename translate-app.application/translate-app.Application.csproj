@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="UseCases\" />
+    <ProjectReference Include="..\translate-app.domain\translate-app.Domain.csproj" />
   </ItemGroup>
 
 </Project>
