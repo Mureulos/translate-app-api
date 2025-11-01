@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*
+    Response é o objeto de saída, retornado após o processamento.
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
