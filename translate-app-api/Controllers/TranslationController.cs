@@ -22,8 +22,7 @@ namespace translate_app.Api.Controllers
         }
 
 
-        [Authorize]
-        [HttpPost("api/translate")]
+        [HttpPost("translate")]
         public async Task<IActionResult> TranslateText([FromBody] TranslationRequestDto request, CancellationToken cancellationToken)
         {
             if (request is null) 

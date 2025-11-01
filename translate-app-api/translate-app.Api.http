@@ -1,0 +1,10 @@
+﻿@translate-app.Api_HostAddress = https://localhost:7264
+
+POST {{translate-app.Api_HostAddress}}/api/translation/api/translate
+Content-Type: application/json
+
+{
+  //TranslationRequestDto
+}
+
+###
