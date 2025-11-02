@@ -29,4 +29,8 @@
     <ProjectReference Include="..\translate-app.domain\translate-app.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>
