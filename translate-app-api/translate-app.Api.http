@@ -8,3 +8,7 @@ Content-Type: application/json
 }
 
 ###
+
+GET {{translate-app.Api_HostAddress}}/api/language
+
+###

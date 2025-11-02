@@ -9,9 +9,9 @@ namespace translate_app.Api.Controllers
 
     public class LanguageController : ControllerBase
     {
-        private readonly LanguageRepository _languageRepository;
+        private readonly ILanguageRepository _languageRepository;
 
-        public LanguageController(LanguageRepository languageRepository) 
+        public LanguageController(ILanguageRepository languageRepository) 
         {
             _languageRepository = languageRepository;
         }
