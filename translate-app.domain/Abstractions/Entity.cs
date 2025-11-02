@@ -8,6 +8,6 @@ namespace translate_app.Domain.Abstractions
 {
     public class Entity
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
     }
 }

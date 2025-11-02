@@ -4,19 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using translate_app.Domain.Abstractions;
+using translate_app.Domain.Entities;
 
-namespace translate_app.domain.Models
+namespace translate_app.Domain.Entities
 {
-    public class TranslationRequest: Entity, IAgregateRoot
+    public class TranslationRequest : Entity, IAgregateRoot
     {
         public string Text { get; set; } = string.Empty;
-        public string? SourceLanguage { get; set; }
-        public string TargetLanguage { get; set; } = string.Empty;
         public string Translation { get; set; } = string.Empty;
+
+        public int? SourceLanguageId { get; set; }
+        public Language? SourceLanguage { get; set; }
+
+        public int TargetLanguageId { get; set; }
+        public Language TargetLanguage { get; set; }
 
         public int CharacterCount => Text.Length;
         public int? UserId { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
     }
 }

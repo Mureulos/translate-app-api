@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading;
 using translate_app.Application.UseCases.Translation.Translate;
 using translate_app.Domain.Repositories;
 using translate_app.Infrastructure.Repositories;
@@ -13,16 +14,16 @@ namespace translate_app.Api.Controllers
     public class TranslationController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public ITranslationRepository _translationRepository;
+        public ILanguageRepository _languageRepository;
 
-        public TranslationController(IMediator mediator, ITranslationRepository translationRepository)
+        public TranslationController(IMediator mediator, ILanguageRepository languageRepository)
         {
             _mediator = mediator;
-            _translationRepository = translationRepository;
+            _languageRepository = languageRepository;
         }
 
 
-        [HttpPost("translate")]
+        [HttpPost("")]
         public async Task<IActionResult> TranslateText([FromBody] TranslationRequestDto request, CancellationToken cancellationToken)
         {
             if (request is null) 

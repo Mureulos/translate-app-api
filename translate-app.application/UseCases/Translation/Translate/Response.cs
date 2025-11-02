@@ -2,12 +2,7 @@
     Response é o objeto de saída, retornado após o processamento.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using translate_app.domain.Models;
+using translate_app.Domain.Entities;
 
 namespace translate_app.Application.UseCases.Translation.Translate
 {

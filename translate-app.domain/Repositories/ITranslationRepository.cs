@@ -1,4 +1,4 @@
-﻿using translate_app.domain.Models;
+﻿using translate_app.Domain.Entities;
 
 namespace translate_app.Domain.Repositories
 {
