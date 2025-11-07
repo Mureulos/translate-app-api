@@ -7,5 +7,5 @@ using translate_app.Domain.Entities;
 
 namespace translate_app.Application.UseCases.Languages.GetLanguageById
 {
-    public sealed record Response(Language language);
+    public sealed record Response(LanguageResponse language);
 }

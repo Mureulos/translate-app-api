@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\translate-app.domain\translate-app.Domain.csproj" />
+    <ProjectReference Include="..\translate-app.Infrastructure\translate-app.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

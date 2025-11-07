@@ -2,5 +2,5 @@
 
 namespace translate_app.Application.UseCases.Languages.GetAllLanguages
 {
-    public sealed record Response(Language[] Languages);
+    public sealed record Response(LanguageResponse[] Languages);
 }
