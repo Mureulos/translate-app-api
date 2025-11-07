@@ -4,6 +4,7 @@ using translate_app.Domain.Repositories;
 using translate_app.Infrastructure;
 using translate_app.Infrastructure.Data;
 using translate_app.Infrastructure.Repositories;
+using translate_app.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -26,6 +27,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<ITranslationRepository, TranslationRepository>();
 builder.Services.AddScoped<ILanguageRepository, LanguageRepository>();
+
+builder.Services.AddSingleton<AIService>();
 
 var app = builder.Build();
 
