@@ -8,7 +8,7 @@ using translate_app.Domain.Entities;
 
 namespace translate_app.Domain.Entities
 {
-    public class TranslationRequest : Entity, IAgregateRoot
+    public class TranslationResult : Entity, IAgregateRoot
     {
         public string Text { get; set; } = string.Empty;
         public string Translation { get; set; } = string.Empty;

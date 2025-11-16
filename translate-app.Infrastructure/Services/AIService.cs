@@ -14,7 +14,7 @@ namespace translate_app.Infrastructure.Services
             if (string.IsNullOrEmpty(apiKey))
                 throw new InvalidOperationException("API Key do Gemini não encontrada.");
 
-            _model = new GenerativeModel(apiKey, "gemini-pro");
+            _model = new GenerativeModel(apiKey, "gemini-2.0-flash");
         }
 
         public async Task<string> TranslateAsync(
