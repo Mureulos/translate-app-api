@@ -18,7 +18,7 @@ namespace translate_app.Infrastructure.Repositories
             return await _context.Set<Language>().ToListAsync();
         }
 
-        public async Task<Language> GetLanguageById(int idLanguage, CancellationToken cancellationToken)
+        public async Task<Language?> GetLanguageById(int idLanguage, CancellationToken cancellationToken)
         {
             return await _context.Set<Language>().FirstOrDefaultAsync(lang => lang.Id == idLanguage, cancellationToken);
         }

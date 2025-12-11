@@ -14,6 +14,7 @@ namespace translate_app.Application.UseCases.Translation.Translate
     {
         private readonly ILanguageRepository _languageRepository;
         private readonly AIService _aiService;
+        private int _charactersLimit = 300;
 
         public Handler(ILanguageRepository languageRepository, AIService aiService)
         {
@@ -43,6 +44,8 @@ namespace translate_app.Application.UseCases.Translation.Translate
             if (string.IsNullOrEmpty(command.request.Text))
                 return Result.Failure<Response>(new Error("400", "Request text cannot be null or empty"));
 
+            if (command.request.Text.Length > _charactersLimit)
+                return Result.Failure<Response>(new Error("400", $"Your request text cannot have more than {300} characters"));
 
             var translation = await _aiService.TranslateAsync(
                 command.request.Text,
