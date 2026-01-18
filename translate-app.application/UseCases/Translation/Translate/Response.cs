@@ -2,17 +2,18 @@
     Response é o objeto de saída, retornado após o processamento.
 */
 
+using translate_app.Application.UseCases.Translation.Entities.Response;
 using translate_app.Domain.Entities;
 
 namespace translate_app.Application.UseCases.Translation.Translate
 {
     public sealed class Response
     {
-        public TranslationResultDto Translation { get; }
+        public TranslationResponse Translation { get; }
 
         public Response(TranslationResult translationRequest)
         {
-            Translation = new TranslationResultDto
+            Translation = new TranslationResponse
             {
                 Id = translationRequest.Id,
                 Text = translationRequest.Text,

@@ -1,6 +1,6 @@
-namespace translate_app.Application.UseCases.Translation.Translate
+namespace translate_app.Application.UseCases.Translation.Entities.DTOs
 {
-    public class TranslationRequestDto
+    public class TranslationDto
     {
         public string Text { get; set; } = string.Empty;
         public int TargetLanguageId { get; set; }

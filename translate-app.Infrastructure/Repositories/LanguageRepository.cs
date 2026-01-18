@@ -13,14 +13,18 @@ namespace translate_app.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Language>> GetAllLanguages(CancellationToken cancellationToken)
+        public async Task<IEnumerable<Language>> GetAllLanguages(CancellationToken cancellationToken = default)
         {
-            return await _context.Set<Language>().ToListAsync();
+            return await _context.Languages
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
         }
 
-        public async Task<Language?> GetLanguageById(int idLanguage, CancellationToken cancellationToken)
+        public async Task<Language?> GetLanguageById(int idLanguage, CancellationToken cancellationToken = default)
         {
-            return await _context.Set<Language>().FirstOrDefaultAsync(lang => lang.Id == idLanguage, cancellationToken);
+            return await _context.Languages
+                .AsNoTracking()
+                .FirstOrDefaultAsync(lang => lang.Id == idLanguage, cancellationToken);
         }
     }
 }

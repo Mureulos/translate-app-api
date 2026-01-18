@@ -1,4 +1,4 @@
-﻿namespace translate_app.Application.UseCases.Languages
+﻿namespace translate_app.Application.UseCases.Languages.Entities.Response
 {
     public class LanguageResponse
     {

@@ -12,7 +12,13 @@ namespace translate_app.Infrastructure.Repositories
 {
     public class TranslationRepository(AppDbContext context) : ITranslationRepository
     {
-        Task<TranslationResult> ITranslationRepository.TranslateText(string text, string TargetLanguage, string? SourceLanguage, CancellationToken cancellationToken)
+        Task<TranslationResult> ITranslationRepository
+        .TranslateText(
+            string text, 
+            string TargetLanguage, 
+            string? SourceLanguage, 
+            CancellationToken cancellationToken
+        )
         {
             throw new NotImplementedException();
         }

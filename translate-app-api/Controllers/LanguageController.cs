@@ -16,7 +16,6 @@ namespace translate_app.Api.Controllers
             _languageRepository = languageRepository;
         }
 
-
         [HttpGet("")]
         public async Task<IActionResult> GetAllLanguages(CancellationToken cancellationToken)
         {

@@ -1,8 +1,8 @@
 using translate_app.Domain.Entities;
 
-namespace translate_app.Application.UseCases.Translation.Translate;
+namespace translate_app.Application.UseCases.Translation.Entities.Response;
 
-public class TranslationResultDto
+public class TranslationResponse
 {
     public int Id { get; init; }
     public required string Text { get; init; }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading;
+using translate_app.Application.UseCases.Translation.Entities.DTOs;
 using translate_app.Application.UseCases.Translation.Translate;
 using translate_app.Domain.Repositories;
 using translate_app.Infrastructure.Repositories;
@@ -24,7 +25,7 @@ namespace translate_app.Api.Controllers
 
 
         [HttpPost("")]
-        public async Task<IActionResult> TranslateText([FromBody] TranslationRequestDto request, CancellationToken cancellationToken)
+        public async Task<IActionResult> TranslateText([FromBody] TranslationDto request, CancellationToken cancellationToken)
         {
             if (request is null) 
                 return BadRequest();
