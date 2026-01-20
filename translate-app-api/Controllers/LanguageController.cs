@@ -1,33 +1,32 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using translate_app.Domain.Repositories;
-using translate_app.Infrastructure.Repositories;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using translate_app.Application.UseCases.Languages.GetAllLanguages;
+using translate_app.Application.UseCases.Languages.GetLanguageById;
 
-namespace translate_app.Api.Controllers
+namespace translate_app.Api.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class LanguageController: ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    private readonly IMediator _mediator;
 
-    public class LanguageController : ControllerBase
+    public LanguageController(IMediator mediator)
     {
-        private readonly ILanguageRepository _languageRepository;
+        _mediator = mediator;
+    }
 
-        public LanguageController(ILanguageRepository languageRepository) 
-        {
-            _languageRepository = languageRepository;
-        }
+    [HttpGet]
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+    {
+        var languages = await _mediator.Send(new GetAllLanguagesQuery(), cancellationToken);
+        return Ok(languages);
+    }
 
-        [HttpGet("")]
-        public async Task<IActionResult> GetAllLanguages(CancellationToken cancellationToken)
-        {
-            var languages = await _languageRepository.GetAllLanguages(cancellationToken);
-            return Ok(languages);
-        }
-
-        [HttpGet("{idLanguage}")]
-        public async Task<IActionResult> GetLanguageById(int idLanguage, CancellationToken cancellationToken)
-        {
-            var languages = await _languageRepository.GetLanguageById(idLanguage, cancellationToken);
-            return Ok(languages);
-        }
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
+    {
+        var language = await _mediator.Send(new GetLanguageByIdQuery(id), cancellationToken);
+        return language is not null ? Ok(language) : NotFound();
     }
 }

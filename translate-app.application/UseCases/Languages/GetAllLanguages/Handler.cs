@@ -1,12 +1,12 @@
 ﻿using MediatR;
-using System.Threading.Tasks;
+using translate_app.Application.UseCases.Languages.Entities.Response;
 using translate_app.Domain.Abstractions;
 using translate_app.Domain.Repositories;
 using translate_app.Infrastructure.Services;
 
 namespace translate_app.Application.UseCases.Languages.GetAllLanguages
 {
-    public sealed class Handler: IRequestHandler<Command, Result<Response>>
+    public sealed class Handler: IRequestHandler<GetAllLanguagesQuery, Result<Response>>
     {
         private readonly ILanguageRepository _languageRepository;
         private readonly AIService _aiService;
@@ -17,7 +17,7 @@ namespace translate_app.Application.UseCases.Languages.GetAllLanguages
             _aiService = aiService;
         }
 
-        public async Task<Result<Response>> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result<Response>> Handle(GetAllLanguagesQuery query, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -38,6 +38,7 @@ namespace translate_app.Application.UseCases.Languages.GetAllLanguages
 
             // Aguarda TODAS as tarefas de tradução terminarem em paralelo
             var translatedLanguages = await Task.WhenAll(translationTasks);
+
             return Result.Success(new Response(translatedLanguages));
         }
     }
