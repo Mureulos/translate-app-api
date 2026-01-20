@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using translate_app.Domain.Abstractions;
-using translate_app.Domain.Entities;
+﻿using translate_app.Domain.Abstractions;
 
 namespace translate_app.Domain.Entities
 {
-    public class TranslationResult : Entity, IAgregateRoot
+    public class TranslationR : Entity, IAgregateRoot
     {
         public string Text { get; set; } = string.Empty;
-        public string Translation { get; set; } = string.Empty;
+        public string TranslationText { get; set; } = string.Empty;
 
         public int? SourceLanguageId { get; set; }
         public Language? SourceLanguage { get; set; }

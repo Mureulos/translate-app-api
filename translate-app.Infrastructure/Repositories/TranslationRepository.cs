@@ -12,7 +12,7 @@ namespace translate_app.Infrastructure.Repositories
 {
     public class TranslationRepository(AppDbContext context) : ITranslationRepository
     {
-        Task<TranslationResult> ITranslationRepository
+        Task<TranslationR> ITranslationRepository
         .TranslateText(
             string text, 
             string TargetLanguage, 

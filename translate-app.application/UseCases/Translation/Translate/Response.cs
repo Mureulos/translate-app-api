@@ -7,13 +7,13 @@ using translate_app.Domain.Entities;
 
 namespace translate_app.Application.UseCases.Translation.Translate
 {
-    public sealed record Response(TranslationResult request)
+    public sealed record Response(TranslationR request)
     {
         public TranslationResponse Translation { get; init; } = new()
         {
             Id = request.Id,
             Text = request.Text,
-            Translation = request.Translation,
+            Translation = request.TranslationText,
             SourceLanguage = request.SourceLanguage,
             TargetLanguage = request.TargetLanguage,
             CharacterCount = request.Text.Length,

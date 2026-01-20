@@ -1,0 +1,62 @@
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using translate_app.Application.UseCases.User.CreateUser;
+using translate_app.Application.UseCases.User.DeleteUser;
+using translate_app.Application.UseCases.User.GetAllUsers;
+using translate_app.Application.UseCases.User.GetUserById;
+using translate_app.Application.UseCases.User.UpdateUser;
+using translate_app.Domain.Entities;
+using translate_app.Domain.Entities.DTOs;
+
+namespace translate_app.Api.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class UserController: ControllerBase
+{
+    private readonly IMediator _mediator;
+
+    public UserController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+    {
+        var user = await _mediator.Send(new GetAllUsersQuery(), cancellationToken);
+        return Ok(user);    
+    }
+
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
+    {
+        var user = await _mediator.Send(new GetUserByIdQuery(id), cancellationToken);
+        return Ok(user);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] UserDto dto, CancellationToken cancellationToken)
+    {
+        var command = new CreateUserCommand(dto);
+
+        var user = await _mediator.Send(command, cancellationToken);
+        return Ok(user);
+    }
+
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> Update(int id, [FromBody] UserDto dto, CancellationToken cancellationToken)
+    {
+        var command = new UpdateUserCommand(id, dto);
+
+        var user = await _mediator.Send(command, cancellationToken);
+        return Ok(user);
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
+    {
+        var user = await _mediator.Send(new DeleteUserCommand(id), cancellationToken);
+        return Ok(user);
+    }
+}

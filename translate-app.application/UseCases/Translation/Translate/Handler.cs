@@ -58,17 +58,17 @@ namespace translate_app.Application.UseCases.Translation.Translate
                 return Result.Failure<Response>(new Error("400", "Cannot make the translation"));
 
 
-            var translationdto = new TranslationResult
+            var translationDto = new TranslationR
             {
                 Text = command.dto.Text,
                 SourceLanguage = sourceLanguage,
                 TargetLanguage = targetLanguage,
-                Translation = translation,
+                TranslationText = translation,
                 UserId = null,
                 CreatedAt = DateTime.UtcNow
             };
 
-            return Result.Success(new Response(translationdto));
+            return Result.Success(new Response(translationDto));
         }   
     }
 }

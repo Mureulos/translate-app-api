@@ -18,23 +18,33 @@ builder.Configuration
     .AddEnvironmentVariables();
 
 builder.Services.AddApplication();
-builder.Services.AddInfrastructure();
+builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 builder.Services.AddScoped<ITranslationRepository, TranslationRepository>();
 builder.Services.AddScoped<ILanguageRepository, LanguageRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddSingleton<AIService>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularApp",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment()) 
     app.MapOpenApi();
 
+app.UseCors("AllowAngularApp");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
