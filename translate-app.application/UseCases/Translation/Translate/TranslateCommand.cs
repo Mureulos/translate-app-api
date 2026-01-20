@@ -8,5 +8,5 @@ using translate_app.Domain.Abstractions;
 
 namespace translate_app.Application.UseCases.Translation.Translate
 {
-    public sealed record Command(TranslationDto request) : IRequest<Result<Response>>;
+    public sealed record TranslateCommand(TranslationDto dto) : IRequest<Result<Response>>;
 }

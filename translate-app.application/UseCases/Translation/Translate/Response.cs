@@ -7,22 +7,17 @@ using translate_app.Domain.Entities;
 
 namespace translate_app.Application.UseCases.Translation.Translate
 {
-    public sealed class Response
+    public sealed record Response(TranslationResult request)
     {
-        public TranslationResponse Translation { get; }
-
-        public Response(TranslationResult translationRequest)
+        public TranslationResponse Translation { get; init; } = new()
         {
-            Translation = new TranslationResponse
-            {
-                Id = translationRequest.Id,
-                Text = translationRequest.Text,
-                Translation = translationRequest.Translation,
-                SourceLanguage = translationRequest.SourceLanguage,
-                TargetLanguage = translationRequest.TargetLanguage,
-                CharacterCount = translationRequest.Text.Length,
-                CreatedAt = translationRequest.CreatedAt
-            };
-        }
+            Id = request.Id,
+            Text = request.Text,
+            Translation = request.Translation,
+            SourceLanguage = request.SourceLanguage,
+            TargetLanguage = request.TargetLanguage,
+            CharacterCount = request.Text.Length,
+            CreatedAt = request.CreatedAt
+        };
     }
 }

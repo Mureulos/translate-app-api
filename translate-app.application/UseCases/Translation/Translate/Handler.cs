@@ -10,7 +10,7 @@ using translate_app.Infrastructure.Services;
 
 namespace translate_app.Application.UseCases.Translation.Translate
 {
-    public sealed class Handler: IRequestHandler<Command, Result<Response>>
+    public sealed class Handler: IRequestHandler<TranslateCommand, Result<Response>>
     {
         private readonly ILanguageRepository _languageRepository;
         private readonly AIService _aiService;
@@ -22,44 +22,45 @@ namespace translate_app.Application.UseCases.Translation.Translate
             _aiService = aiService;
         }
 
-
-        public async Task<Result<Response>> Handle(Command command, CancellationToken cancellationToken)
+        public async Task<Result<Response>> Handle(TranslateCommand command, CancellationToken cancellationToken)
         {
             Language? sourceLanguage = null;
 
-            if (command.request.SourceLanguageId != null)
+            if (command.dto.SourceLanguageId != null)
             {
-                sourceLanguage = await _languageRepository.GetLanguageById(command.request.SourceLanguageId.Value, cancellationToken);
+                sourceLanguage = await _languageRepository.GetLanguageById(command.dto.SourceLanguageId.Value, cancellationToken);
 
                 if (sourceLanguage == null)
                     return Result.Failure<Response>(new Error("404", "Source language not found"));
             }
 
 
-            var targetLanguage = await _languageRepository.GetLanguageById(command.request.TargetLanguageId, cancellationToken);
+            var targetLanguage = await _languageRepository.GetLanguageById(command.dto.TargetLanguageId, cancellationToken);
+
             if (targetLanguage == null)
                 return Result.Failure<Response>(new Error("404", "Target language not found"));
 
+            if (string.IsNullOrEmpty(command.dto.Text))
+                return Result.Failure<Response>(new Error("400", "dto text cannot be null or empty"));
 
-            if (string.IsNullOrEmpty(command.request.Text))
-                return Result.Failure<Response>(new Error("400", "Request text cannot be null or empty"));
+            if (command.dto.Text.Length > _charactersLimit)
+                return Result.Failure<Response>(new Error("400", $"Your dto text cannot have more than {300} characters"));
 
-            if (command.request.Text.Length > _charactersLimit)
-                return Result.Failure<Response>(new Error("400", $"Your request text cannot have more than {300} characters"));
 
             var translation = await _aiService.TranslateAsync(
-                command.request.Text,
+                command.dto.Text,
                 targetLanguage.Name,
                 sourceLanguage?.Name,
                 cancellationToken
             );
+
             if (translation == null)
                 return Result.Failure<Response>(new Error("400", "Cannot make the translation"));
 
 
-            var translationRequest = new TranslationResult
+            var translationdto = new TranslationResult
             {
-                Text = command.request.Text,
+                Text = command.dto.Text,
                 SourceLanguage = sourceLanguage,
                 TargetLanguage = targetLanguage,
                 Translation = translation,
@@ -67,7 +68,7 @@ namespace translate_app.Application.UseCases.Translation.Translate
                 CreatedAt = DateTime.UtcNow
             };
 
-            return Result.Success(new Response(translationRequest));
+            return Result.Success(new Response(translationdto));
         }   
     }
 }
