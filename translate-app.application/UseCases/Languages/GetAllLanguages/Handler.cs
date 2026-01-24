@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using System;
+using System.Linq;
+using MediatR;
 using translate_app.Application.UseCases.Languages.Entities.Response;
 using translate_app.Domain.Abstractions;
 using translate_app.Domain.Repositories;
@@ -20,13 +22,36 @@ namespace translate_app.Application.UseCases.Languages.GetAllLanguages
         public async Task<Result<Response>> Handle(GetAllLanguagesQuery query, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
+            
 
             var allLanguages = await _languageRepository.GetAllLanguages(cancellationToken);
 
-            // Cria uma lista de "tarefas de tradução" (tasks)
+            if (allLanguages is null || !allLanguages.Any())
+                return Result.Failure<Response>(new Error("404", "Languages not found"));
+
+
             var translationTasks = allLanguages.Select(async item =>
             {
-                var localizedName = await _aiService.TranslateAsync(item.Name, "English", item.Name);
+                var localizedName = item.Name ?? string.Empty;
+
+                if (!string.IsNullOrWhiteSpace(item.Name))
+                {
+                    try
+                    {
+                        var aiTranslation = await _aiService.TranslateAsync(item.Name, "English", item.Name, cancellationToken);
+
+                        if (!string.IsNullOrWhiteSpace(aiTranslation))
+                            localizedName = aiTranslation.Trim();
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        throw;
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+
                 return new LanguageResponse
                 {
                     Id = item.Id,
@@ -36,8 +61,7 @@ namespace translate_app.Application.UseCases.Languages.GetAllLanguages
                 };
             });
 
-            // Aguarda TODAS as tarefas de tradução terminarem em paralelo
-            var translatedLanguages = await Task.WhenAll(translationTasks);
+            var translatedLanguages = (await Task.WhenAll(translationTasks)).ToArray();
 
             return Result.Success(new Response(translatedLanguages));
         }

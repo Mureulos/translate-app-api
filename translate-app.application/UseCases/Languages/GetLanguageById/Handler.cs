@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System;
+using MediatR;
 using translate_app.Application.UseCases.Languages.Entities.Response;
 using translate_app.Domain.Abstractions;
 using translate_app.Domain.Repositories;
@@ -21,8 +22,28 @@ namespace translate_app.Application.UseCases.Languages.GetLanguageById
         {
             cancellationToken.ThrowIfCancellationRequested();
 
+
             var response = await _languageRepository.GetLanguageById(query.idLanguage, cancellationToken);
-            var localizedName = await _aiService.TranslateAsync(response.Name, "English", response.Name);
+
+            if (response is null)
+                return Result.Failure<Response>(new Error("404", "Language not found"));
+
+
+            var localizedName = response.Name ?? string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(response.Name))
+            {
+                try
+                {
+                    var aiTranslation = await _aiService.TranslateAsync(response.Name, "English", response.Name, cancellationToken);
+
+                    if (!string.IsNullOrWhiteSpace(aiTranslation))
+                        localizedName = aiTranslation.Trim();
+                }
+                catch (Exception)
+                {
+                }
+            }
 
             var language = new LanguageResponse
             {

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using translate_app.Api.Extensions;
 using translate_app.Application.UseCases.Translation.Entities.DTOs;
 using translate_app.Application.UseCases.Translation.Translate;
 
@@ -20,9 +21,6 @@ public class TranslationController: ControllerBase
     public async Task<IActionResult> TranslateText([FromBody] TranslationDto request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new TranslateCommand(request), cancellationToken);
-
-        return result.IsSuccess
-            ? Ok(result.Value)
-            : StatusCode(500, result.Error?.Message);
+        return this.ToActionResult(result);
     }
 }

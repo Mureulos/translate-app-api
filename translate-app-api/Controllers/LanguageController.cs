@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using translate_app.Api.Extensions;
 using translate_app.Application.UseCases.Languages.GetAllLanguages;
 using translate_app.Application.UseCases.Languages.GetLanguageById;
 
@@ -19,14 +20,14 @@ public class LanguageController: ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
-        var languages = await _mediator.Send(new GetAllLanguagesQuery(), cancellationToken);
-        return Ok(languages);
+        var result = await _mediator.Send(new GetAllLanguagesQuery(), cancellationToken);
+        return this.ToActionResult(result);
     }
 
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
     {
-        var language = await _mediator.Send(new GetLanguageByIdQuery(id), cancellationToken);
-        return language is not null ? Ok(language) : NotFound();
+        var result = await _mediator.Send(new GetLanguageByIdQuery(id), cancellationToken);
+        return this.ToActionResult(result);
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace translate_app.Domain.Abstractions
 {
@@ -50,6 +44,12 @@ namespace translate_app.Domain.Abstractions
 
         [NotNull]
         public T Value => _value! ?? throw new InvalidOperationException("Result has no value");
+
+        public bool TryGetValue([NotNullWhen(true)] out T? value)
+        {
+            value = _value;
+            return IsSuccess && value is not null;
+        }
 
         public static implicit operator Result<T>(T? value) => Create(value);
     }
