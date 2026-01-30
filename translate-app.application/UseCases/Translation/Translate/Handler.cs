@@ -26,29 +26,29 @@ namespace translate_app.Application.UseCases.Translation.Translate
         {
             Language? sourceLanguage = null;
 
-            if (command.dto.SourceLanguageId != null)
+            if (command.Dto.SourceLanguageId != null)
             {
-                sourceLanguage = await _languageRepository.GetLanguageById(command.dto.SourceLanguageId.Value, cancellationToken);
+                sourceLanguage = await _languageRepository.GetLanguageById(command.Dto.SourceLanguageId.Value, cancellationToken);
 
                 if (sourceLanguage == null)
                     return Result.Failure<Response>(new Error("404", "Source language not found"));
             }
 
 
-            var targetLanguage = await _languageRepository.GetLanguageById(command.dto.TargetLanguageId, cancellationToken);
+            var targetLanguage = await _languageRepository.GetLanguageById(command.Dto.TargetLanguageId, cancellationToken);
 
             if (targetLanguage == null)
                 return Result.Failure<Response>(new Error("404", "Target language not found"));
 
-            if (string.IsNullOrEmpty(command.dto.Text))
+            if (string.IsNullOrEmpty(command.Dto.Text))
                 return Result.Failure<Response>(new Error("400", "dto text cannot be null or empty"));
 
-            if (command.dto.Text.Length > _charactersLimit)
+            if (command.Dto.Text.Length > _charactersLimit)
                 return Result.Failure<Response>(new Error("400", $"Your dto text cannot have more than {300} characters"));
 
 
             var translation = await _aiService.TranslateAsync(
-                command.dto.Text,
+                command.Dto.Text,
                 targetLanguage.Name,
                 sourceLanguage?.Name,
                 cancellationToken
@@ -60,7 +60,7 @@ namespace translate_app.Application.UseCases.Translation.Translate
 
             var translationDto = new TranslationR
             {
-                Text = command.dto.Text,
+                Text = command.Dto.Text,
                 SourceLanguage = sourceLanguage,
                 TargetLanguage = targetLanguage,
                 TranslationText = translation,

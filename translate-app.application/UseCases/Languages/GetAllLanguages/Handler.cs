@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using MediatR;
+﻿using MediatR;
 using translate_app.Application.UseCases.Languages.Entities.Response;
 using translate_app.Domain.Abstractions;
 using translate_app.Domain.Repositories;
@@ -56,7 +54,7 @@ namespace translate_app.Application.UseCases.Languages.GetAllLanguages
                 {
                     Id = item.Id,
                     Code = item.Code,
-                    Name = item.Name,
+                    Name = item.Name ?? string.Empty,
                     LocalizedName = localizedName
                 };
             });

@@ -18,7 +18,6 @@ namespace translate_app.Infrastructure
                 )
             );
 
-            services.AddTransient<ITranslationRepository, TranslationRepository>();
             services.AddTransient<ILanguageRepository, LanguageRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
 

@@ -18,10 +18,10 @@ namespace translate_app.Application.UseCases.User.GetUserById
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            if (command.userId == null)
+            if (command.UserId <= 0)
                 return Result.Failure<Response>(new Error("400", "User id is required"));
 
-            var user = await _userRepository.GetUserById(command.userId, cancellationToken);
+            var user = await _userRepository.GetUserById(command.UserId, cancellationToken);
 
             if (user == null)
                 return Result.Failure<Response>(new Error("404", "User not found"));
@@ -32,7 +32,7 @@ namespace translate_app.Application.UseCases.User.GetUserById
                 Name = user.Name,
                 LastName = user.LastName,
                 Email = user.Email,
-                PasswordHash = user.PasswordHash,
+                Password = user.Password,
                 Role = user.Role,
                 DefaultLanguage = user.DefaultLanguage,
                 CreateAt = user.CreateAt

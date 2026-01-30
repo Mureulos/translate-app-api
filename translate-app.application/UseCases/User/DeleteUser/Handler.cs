@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using translate_app.Application.UseCases.User.Entities.Response;
 using translate_app.Domain.Abstractions;
 using translate_app.Domain.Repositories;
 
@@ -18,10 +17,10 @@ namespace translate_app.Application.UseCases.User.DeleteUser
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            if (command.userId == null)
+            if (command.UserId <= 0)
                 return Result.Failure<Response>(new Error("400", "User id is required"));
 
-            await _userRepository.DeleteUser(command.userId, cancellationToken);
+            await _userRepository.DeleteUser(command.UserId, cancellationToken);
 
             return Result.Success(new Response());
         }

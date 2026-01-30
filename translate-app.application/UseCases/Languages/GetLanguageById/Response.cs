@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using translate_app.Application.UseCases.Languages.Entities.Response;
-using translate_app.Domain.Entities;
+﻿using translate_app.Application.UseCases.Languages.Entities.Response;
 
 namespace translate_app.Application.UseCases.Languages.GetLanguageById
 {

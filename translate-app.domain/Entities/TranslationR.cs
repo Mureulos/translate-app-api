@@ -11,7 +11,7 @@ namespace translate_app.Domain.Entities
         public Language? SourceLanguage { get; set; }
 
         public int TargetLanguageId { get; set; }
-        public Language TargetLanguage { get; set; }
+        public Language TargetLanguage { get; set; } = new Language();
 
         public int CharacterCount => Text.Length;
         public int? UserId { get; set; }

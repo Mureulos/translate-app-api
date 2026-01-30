@@ -30,7 +30,7 @@ namespace translate_app.Application.UseCases.User.GetAllUsers
                     Name = u.Name,
                     LastName = u.LastName,
                     Email = u.Email,
-                    PasswordHash = u.PasswordHash,
+                    Password = u.Password,
                     Role = u.Role,
                     DefaultLanguage = u.DefaultLanguage,
                     CreateAt = u.CreateAt
