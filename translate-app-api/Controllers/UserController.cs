@@ -4,6 +4,7 @@ using translate_app.Api.Extensions;
 using translate_app.Application.UseCases.User.CreateUser;
 using translate_app.Application.UseCases.User.DeleteUser;
 using translate_app.Application.UseCases.User.GetAllUsers;
+using translate_app.Application.UseCases.User.GetUserByEmail;
 using translate_app.Application.UseCases.User.GetUserById;
 using translate_app.Application.UseCases.User.UpdateUser;
 using translate_app.Domain.Entities.DTOs;
@@ -32,6 +33,13 @@ public class UserController : ControllerBase
     public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new GetUserByIdQuery(id), cancellationToken);
+        return this.ToActionResult(result);
+    }
+
+    [HttpGet("{email}")]
+    public async Task<IActionResult> GetByEmail(string email, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(new GetUserByEmailQuery(email), cancellationToken);
         return this.ToActionResult(result);
     }
 

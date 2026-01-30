@@ -29,6 +29,13 @@ namespace translate_app.Infrastructure.Repositories
                 .FirstOrDefaultAsync(user => user.Id == id, cancellationToken);
         }
 
+        public async Task<User?> GetUserByEmail(string email, CancellationToken cancellationToken = default)
+        {
+            return await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(user => user.Email == email, cancellationToken);
+        }
+
         public async Task<User> CreateUser(UserDto dto, CancellationToken cancellationToken = default)
         {
             var user = new User
@@ -37,6 +44,7 @@ namespace translate_app.Infrastructure.Repositories
                 LastName = dto.LastName,
                 Email = dto.Email,
                 DefaultLanguage = dto.DefaultLanguage,
+                Password = dto.Password
             };
 
             await _context.Users.AddAsync(user, cancellationToken);
@@ -56,6 +64,9 @@ namespace translate_app.Infrastructure.Repositories
             user.LastName = userDto.LastName;
             user.Email = userDto.Email;
             user.DefaultLanguage = userDto.DefaultLanguage;
+
+            if (!string.IsNullOrEmpty(userDto.Password))
+                user.Password = userDto.Password;
 
             await _context.SaveChangesAsync(cancellationToken);
 

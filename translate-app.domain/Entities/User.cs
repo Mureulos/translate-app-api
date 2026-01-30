@@ -7,7 +7,7 @@ namespace translate_app.Domain.Entities
         public string Name { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-        public string PasswordHash { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
         public string DefaultLanguage { get; set; } = string.Empty;
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;

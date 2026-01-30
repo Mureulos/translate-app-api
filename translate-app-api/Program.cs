@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using translate_app.application;
 using translate_app.Domain.Repositories;
-using translate_app.Infrastructure;
 using translate_app.Infrastructure.Data;
 using translate_app.Infrastructure.Repositories;
 using translate_app.Infrastructure.Services;
@@ -18,15 +20,47 @@ builder.Configuration
     .AddEnvironmentVariables();
 
 builder.Services.AddApplication();
-builder.Services.AddAuthentication();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+
+        var jwtKey = builder.Configuration["Jwt:Key"];
+        var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+        var jwtAudience = builder.Configuration["Jwt:Audience"];
+
+        if (string.IsNullOrWhiteSpace(jwtKey) ||
+            string.IsNullOrWhiteSpace(jwtIssuer) ||
+            string.IsNullOrWhiteSpace(jwtAudience))
+        {
+            throw new InvalidOperationException("Config JWT ausente: Jwt:Key/Issuer/Audience.");
+        }
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtIssuer,
+            ValidAudience = jwtAudience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
 builder.Services.AddAuthorization();
+
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<ITranslationRepository, TranslationRepository>();
 builder.Services.AddScoped<ILanguageRepository, LanguageRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddSingleton<AIService>();
+builder.Services.AddSingleton<TokenService>();
+builder.Services.AddSingleton<PasswordHasherService>();
 
 builder.Services.AddCors(options =>
 {
@@ -46,6 +80,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowAngularApp");
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 app.Run();

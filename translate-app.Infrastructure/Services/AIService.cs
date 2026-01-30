@@ -64,10 +64,8 @@ namespace translate_app.Infrastructure.Services
         {
             var cleanedText = responseText.Trim();
 
-            // Remove blocos de código markdown.
             cleanedText = Regex.Replace(cleanedText, @"^```[\w\s]*\n([\s\S]*?)\n```$", "$1", RegexOptions.Multiline);
 
-            // Remove aspas no início/fim, se o modelo as adicionar
             if (cleanedText.StartsWith("\"") && cleanedText.EndsWith("\""))
                 cleanedText = cleanedText.Substring(1, cleanedText.Length - 2);
 
