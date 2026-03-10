@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using translate_app.application;
 using translate_app.Domain.Repositories;
+using translate_app.Domain.Services;
 using translate_app.Infrastructure.Data;
 using translate_app.Infrastructure.Repositories;
 using translate_app.Infrastructure.Services;
@@ -58,6 +59,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<ILanguageRepository, LanguageRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 builder.Services.AddSingleton<AIService>();
 builder.Services.AddSingleton<TokenService>();
 builder.Services.AddSingleton<PasswordHasherService>();

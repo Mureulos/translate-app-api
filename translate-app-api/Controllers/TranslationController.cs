@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using translate_app.Api.Extensions;
 using translate_app.Application.UseCases.Translation.Entities.DTOs;
 using translate_app.Application.UseCases.Translation.Translate;
+using translate_app.application.UseCases.Translation.TranslateFile;
 
 namespace translate_app.Api.Controllers;
 
@@ -20,7 +21,14 @@ public class TranslationController: ControllerBase
     [HttpPost]
     public async Task<IActionResult> TranslateText([FromBody] TranslationDto request, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new TranslateCommand(request), cancellationToken);
+        var result = await _mediator.Send(new TranslateTextCommand(request), cancellationToken);
+        return this.ToActionResult(result);
+    }
+    
+    [HttpPost("upload")]
+    public async Task<IActionResult> TranslateFileCommand([FromForm] IFormFile file, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(new TranslateFileCommand(file), cancellationToken);
         return this.ToActionResult(result);
     }
 }
