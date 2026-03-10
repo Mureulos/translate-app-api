@@ -11,7 +11,7 @@ using translate_app.Infrastructure.Services;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
 builder.Configuration
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
