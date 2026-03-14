@@ -58,7 +58,7 @@ namespace translate_app.Application.UseCases.Translation.Translate
                 return Result.Failure<Response>(new Error("400", "Cannot make the translation"));
 
 
-            var translationDto = new TranslationR
+            var translationDto = new Domain.Entities.Translation
             {
                 Text = textCommand.Dto.Text,
                 SourceLanguage = sourceLanguage,

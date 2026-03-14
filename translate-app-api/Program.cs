@@ -59,7 +59,8 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<ILanguageRepository, LanguageRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-builder.Services.AddScoped<IFileUploadService, FileUploadService>();
+builder.Services.AddScoped<IExtractTextService, ExtractTextService>();
+builder.Services.AddSingleton<IOcrService, OcrService>();
 builder.Services.AddSingleton<AIService>();
 builder.Services.AddSingleton<TokenService>();
 builder.Services.AddSingleton<PasswordHasherService>();

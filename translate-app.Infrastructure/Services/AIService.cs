@@ -1,10 +1,11 @@
 ﻿using GenerativeAI;
 using Microsoft.Extensions.Configuration;
 using System.Text.RegularExpressions;
+using translate_app.Domain.Services;
 
 namespace translate_app.Infrastructure.Services
 {
-    public class AIService
+    public class AIService: IAIService
     {
         private readonly GenerativeModel _model;
 
@@ -13,7 +14,7 @@ namespace translate_app.Infrastructure.Services
             var apiKey = configuration["Gemini:ApiKey"];
 
             if (string.IsNullOrEmpty(apiKey))
-                throw new InvalidOperationException("API Key do Gemini não encontrada.");
+                throw new InvalidOperationException("Gemini's API key not founded!");
 
             _model = new GenerativeModel(apiKey, "gemini-2.5-flash");
         }

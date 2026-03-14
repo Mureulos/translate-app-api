@@ -52,13 +52,12 @@ namespace translate_app.Infrastructure.Repositories
             return user;
         }
 
-        public async Task<User?> UpdateUser(int id, UserDto userDto, CancellationToken cancellationToken = default)
+        public async Task<User> UpdateUser(int id, UserDto userDto, CancellationToken cancellationToken = default)
         {
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
 
-            if (user is null)
-                return null;
+            if (user is null) return null!;
 
             user.Name = userDto.Name;
             user.LastName = userDto.LastName;

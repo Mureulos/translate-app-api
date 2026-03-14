@@ -5,7 +5,7 @@ namespace translate_app.Infrastructure.Data
 {
     public class AppDbContext(DbContextOptions<AppDbContext> options): DbContext(options) 
     {
-        public DbSet<TranslationR> Translation { get; set; } = null!;
+        public DbSet<Translation> Translation { get; set; } = null!;
         public DbSet<Language> Languages { get; set; } = null!;
         public DbSet<User> Users { get; set; } = null!;
 

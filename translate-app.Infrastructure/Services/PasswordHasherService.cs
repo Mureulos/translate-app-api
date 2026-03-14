@@ -1,6 +1,8 @@
-﻿namespace translate_app.Infrastructure.Services
+﻿using translate_app.Domain.Services;
+
+namespace translate_app.Infrastructure.Services
 {
-    public sealed class PasswordHasherService
+    public sealed class PasswordHasherService: IPasswordHasherService
     {
         public string Hash(string password) => BCrypt.Net.BCrypt.HashPassword(password);
         public bool Verify(string password, string hashedPassword) => BCrypt.Net.BCrypt.Verify(password, hashedPassword);

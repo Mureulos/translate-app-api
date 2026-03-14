@@ -1,5 +1,4 @@
-﻿using Azure;
-using translate_app.Application.UseCases.User.Entities.Response;
+﻿using translate_app.Application.UseCases.User.Entities.Response;
 using translate_app.Application.UseCases.User.GetUserById;
 using translate_app.Domain.Abstractions;
 using translate_app.Domain.Repositories;

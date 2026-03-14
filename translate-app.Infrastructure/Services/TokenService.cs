@@ -3,10 +3,11 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using translate_app.Domain.Entities;
+using translate_app.Domain.Services;
 
 namespace translate_app.Infrastructure.Services
 {
-    public sealed class TokenService(IConfiguration configuration)
+    public sealed class TokenService(IConfiguration configuration): ITokenService
     {
         public string Create(User user)
         {

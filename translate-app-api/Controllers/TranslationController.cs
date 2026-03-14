@@ -24,11 +24,28 @@ public class TranslationController: ControllerBase
         var result = await _mediator.Send(new TranslateTextCommand(request), cancellationToken);
         return this.ToActionResult(result);
     }
-    
-    [HttpPost("upload")]
-    public async Task<IActionResult> TranslateFileCommand([FromForm] IFormFile file, CancellationToken cancellationToken)
+        
+    [HttpPost("from-file")]
+    public async Task<IActionResult> TranslateFromFile(
+        IFormFile file, 
+        [FromForm] int targetLanguageId, 
+        [FromForm] int? sourceLanguageId, 
+        CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new TranslateFileCommand(file), cancellationToken);
-        return this.ToActionResult(result);
+        var extractResult = await _mediator.Send(new ExtractTextFromFileCommand(file), cancellationToken);
+
+        if (!extractResult.IsSuccess)
+            return this.ToActionResult(extractResult);
+
+        var textDto = new TranslationDto
+        {
+            Text = extractResult.Value.response.ExtractedContent,
+            SourceLanguageId = sourceLanguageId,
+            TargetLanguageId = targetLanguageId
+        };
+
+        var translateResult = await _mediator.Send(new TranslateTextCommand(textDto), cancellationToken);
+
+        return this.ToActionResult(translateResult);
     }
 }
