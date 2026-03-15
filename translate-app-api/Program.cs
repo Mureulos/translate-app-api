@@ -36,7 +36,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             string.IsNullOrWhiteSpace(jwtIssuer) ||
             string.IsNullOrWhiteSpace(jwtAudience))
         {
-            throw new InvalidOperationException("Config JWT ausente: Jwt:Key/Issuer/Audience.");
+            throw new InvalidOperationException("Config JWT: Jwt:Key/Issuer/Audience.");
         }
 
         options.TokenValidationParameters = new TokenValidationParameters
@@ -59,7 +59,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<ILanguageRepository, LanguageRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-builder.Services.AddScoped<IExtractTextService, ExtractTextService>();
+builder.Services.AddScoped<IUploadFile, UploadFile>();
 builder.Services.AddSingleton<IOcrService, OcrService>();
 builder.Services.AddSingleton<AIService>();
 builder.Services.AddSingleton<TokenService>();
@@ -77,9 +77,6 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
-
-if (app.Environment.IsDevelopment()) 
-    app.MapOpenApi();
 
 app.UseCors("AllowAngularApp");
 app.UseHttpsRedirection();

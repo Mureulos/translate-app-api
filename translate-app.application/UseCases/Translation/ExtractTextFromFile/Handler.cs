@@ -6,9 +6,9 @@ namespace translate_app.application.UseCases.Translation.TranslateFile
 {
     public sealed class Handler: IRequestHandler<ExtractTextFromFileCommand, Result<Response>>
     {
-        private readonly IExtractTextService _extractTextFromFileService;
+        private readonly IUploadFile _extractTextFromFileService;
 
-        public Handler(IExtractTextService extractTextFromFileService)
+        public Handler(IUploadFile extractTextFromFileService)
         {
             _extractTextFromFileService = extractTextFromFileService;
         }

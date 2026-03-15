@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using translate_app.Api.Extensions;
 using translate_app.Application.UseCases.Translation.Entities.DTOs;
@@ -24,9 +25,10 @@ public class TranslationController: ControllerBase
         var result = await _mediator.Send(new TranslateTextCommand(request), cancellationToken);
         return this.ToActionResult(result);
     }
-        
+    
+    [Authorize]
     [HttpPost("from-file")]
-    public async Task<IActionResult> TranslateFromFile(
+    public async Task<IActionResult> TranslateFromFile( 
         IFormFile file, 
         [FromForm] int targetLanguageId, 
         [FromForm] int? sourceLanguageId, 

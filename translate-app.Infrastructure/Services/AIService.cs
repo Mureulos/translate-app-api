@@ -1,22 +1,25 @@
-﻿using GenerativeAI;
+﻿using System.Text;
+using GenerativeAI;
 using Microsoft.Extensions.Configuration;
 using System.Text.RegularExpressions;
+using OllamaSharp;
 using translate_app.Domain.Services;
 
 namespace translate_app.Infrastructure.Services
 {
     public class AIService: IAIService
     {
-        private readonly GenerativeModel _model;
+        private readonly OllamaApiClient _ollamaClient;
 
         public AIService(IConfiguration configuration)
         {
-            var apiKey = configuration["Gemini:ApiKey"];
+            var url = configuration["Ollama:Url"] ?? "http://localhost:11434";;
+            var modelName = configuration["Ollama:Model"] ?? throw new InvalidOperationException("Ollama model not configured!");
 
-            if (string.IsNullOrEmpty(apiKey))
-                throw new InvalidOperationException("Gemini's API key not founded!");
-
-            _model = new GenerativeModel(apiKey, "gemini-2.5-flash");
+            _ollamaClient = new OllamaApiClient(url)
+            {
+                SelectedModel = modelName
+            };
         }
 
         public async Task<string> TranslateAsync(
@@ -57,8 +60,14 @@ namespace translate_app.Infrastructure.Services
             [RESULT]
           """;
 
-            var response = await _model.GenerateContentAsync(prompt, cancellationToken);
-            return CleanResponse(response.Text);
+          var sb = new StringBuilder();
+
+          await foreach (var stream in _ollamaClient.GenerateAsync(prompt, cancellationToken: cancellationToken))
+          {
+              if (stream?.Response != null) sb.Append(stream.Response);
+          }
+
+          return CleanResponse(sb.ToString());
         }
 
         private string CleanResponse(string responseText)

@@ -4,7 +4,7 @@ using translate_app.Domain.Services;
 
 namespace translate_app.Infrastructure.Services;
 
-public sealed class ExtractTextService(IOcrService ocrService): IExtractTextService
+public sealed class UploadFile(IOcrService ocrService): IUploadFile
 {
     private readonly string[] _allowedExtensions = new[] { ".txt", ".png", ".pdf", ".jpg" };
     private readonly IOcrService _ocrService = ocrService;    
