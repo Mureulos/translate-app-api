@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using translate_app.Domain.Entities;
 using translate_app.Domain.Repositories;
 using translate_app.Infrastructure.Data;
@@ -20,5 +21,13 @@ public class TranslationRepository : ITranslationRepository
         await _context.Translation.AddAsync(translation, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
         return translation;
+    }
+    
+    public async Task<IEnumerable<Translation>> GetSavedTranslations(int userId, CancellationToken cancellationToken = default)
+    {
+        return await _context.Translation
+            .AsNoTracking()
+            .Where(t => t.UserId == userId)
+            .ToListAsync(cancellationToken);
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using translate_app.Api.Extensions;
 using translate_app.Application.UseCases.Translation.Entities.DTOs;
+using translate_app.application.UseCases.Translation.GetSavedTranslations;
 using translate_app.application.UseCases.Translation.SaveTranslation;
 using translate_app.Application.UseCases.Translation.Translate;
 using translate_app.application.UseCases.Translation.TranslateFile;
@@ -64,6 +65,18 @@ public class TranslationController: ControllerBase
             return Unauthorized();
 
         var translateResult = await _mediator.Send(new SaveTranslationCommand(request, userId), cancellationToken); 
+        return this.ToActionResult(translateResult);
+    }
+    
+    [Authorize] 
+    [HttpGet("save")]
+    public async Task<IActionResult> GetSavedTranslations(CancellationToken cancellationToken)
+    {
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            return Unauthorized();
+
+        var translateResult = await _mediator.Send(new GetSavedTranslationsQuery(userId), cancellationToken); 
         return this.ToActionResult(translateResult);
     }
 }

@@ -1,6 +1,7 @@
 using MediatR;
 using translate_app.Domain.Abstractions;
 using translate_app.Domain.Entities;
+using translate_app.Domain.Entities.Response;
 using translate_app.Domain.Repositories;
 
 namespace translate_app.application.UseCases.Translation.SaveTranslation;
@@ -35,13 +36,13 @@ public sealed class Handler : IRequestHandler<SaveTranslationCommand, Result<Res
         };
 
         var saved = await _translationRepository.SaveTranslation(translation, cancellationToken);
-
-        return Result.Success(new Response(
-            saved.Id,
-            saved.Text,
-            saved.TranslationText,
-            saved.UserId,
-            saved.CreatedAt
-        ));
+        
+        return Result.Success(new Response(new SavedTranslationResponse {
+            Id = saved.Id,
+            Text = saved.Text,
+            TranslationText = saved.TranslationText,
+            UserId = saved.UserId,
+            CreatedAt = saved.CreatedAt    
+        }));
     }
 }

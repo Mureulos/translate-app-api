@@ -30,8 +30,4 @@
     <ProjectReference Include="..\translate-app.Infrastructure\translate-app.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="UseCases\Translation\GetSavedTranslations\" />
-  </ItemGroup>
-
 </Project>
