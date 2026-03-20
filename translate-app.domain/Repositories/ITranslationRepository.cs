@@ -4,6 +4,6 @@ namespace translate_app.Domain.Repositories
 {
     public interface ITranslationRepository : IRepository<Translation>
     {
-        Task<Translation> TranslateText(string text, string TargetLanguage, string? SourceLanguage, CancellationToken cancellationToken = default);
+        Task<Translation> SaveTranslation(Translation dto, CancellationToken cancellationToken = default);
     }
 }

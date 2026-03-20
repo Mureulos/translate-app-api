@@ -64,7 +64,6 @@ namespace translate_app.Application.UseCases.Translation.Translate
                 SourceLanguage = sourceLanguage,
                 TargetLanguage = targetLanguage,
                 TranslationText = translation,
-                UserId = null,
                 CreatedAt = DateTime.UtcNow
             };
 

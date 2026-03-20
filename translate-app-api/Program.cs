@@ -58,6 +58,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<ILanguageRepository, LanguageRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITranslationRepository, TranslationRepository>();
 
 builder.Services.AddScoped<IUploadFile, UploadFile>();
 builder.Services.AddSingleton<IOcrService, OcrService>();

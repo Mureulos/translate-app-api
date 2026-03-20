@@ -43,7 +43,7 @@ namespace translate_app.Infrastructure.Migrations
                     b.ToTable("Languages");
                 });
 
-            modelBuilder.Entity("translate_app.Domain.Entities.TranslationR", b =>
+            modelBuilder.Entity("translate_app.Domain.Entities.Translation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -68,7 +68,7 @@ namespace translate_app.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -76,6 +76,8 @@ namespace translate_app.Infrastructure.Migrations
                     b.HasIndex("SourceLanguageId");
 
                     b.HasIndex("TargetLanguageId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Translation");
                 });
@@ -120,7 +122,7 @@ namespace translate_app.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("translate_app.Domain.Entities.TranslationR", b =>
+            modelBuilder.Entity("translate_app.Domain.Entities.Translation", b =>
                 {
                     b.HasOne("translate_app.Domain.Entities.Language", "SourceLanguage")
                         .WithMany()
@@ -132,9 +134,17 @@ namespace translate_app.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("translate_app.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("SourceLanguage");
 
                     b.Navigation("TargetLanguage");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using translate_app.Domain.Repositories;
@@ -20,6 +20,7 @@ namespace translate_app.Infrastructure
 
             services.AddTransient<ILanguageRepository, LanguageRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<ITranslationRepository, TranslationRepository>();
 
             return services;
         }

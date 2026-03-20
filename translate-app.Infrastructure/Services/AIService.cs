@@ -13,7 +13,7 @@ namespace translate_app.Infrastructure.Services
 
         public AIService(IConfiguration configuration)
         {
-            var url = configuration["Ollama:Url"] ?? "http://localhost:11434";;
+            var url = configuration["Ollama:Url"];
             var modelName = configuration["Ollama:Model"] ?? throw new InvalidOperationException("Ollama model not configured!");
 
             _ollamaClient = new OllamaApiClient(url)

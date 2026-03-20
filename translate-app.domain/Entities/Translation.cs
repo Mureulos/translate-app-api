@@ -1,4 +1,4 @@
-﻿using translate_app.Domain.Abstractions;
+﻿﻿using translate_app.Domain.Abstractions;
 
 namespace translate_app.Domain.Entities
 {
@@ -6,11 +6,18 @@ namespace translate_app.Domain.Entities
     {
         public string Text { get; set; } = string.Empty;
         public string TranslationText { get; set; } = string.Empty;
+        
+        public int? SourceLanguageId { get; set; }
         public Language? SourceLanguage { get; set; }
-        public Language TargetLanguage { get; set; } = new Language();
+        
+        public int TargetLanguageId { get; set; }
+        public Language TargetLanguage { get; set; } = null!;
 
         public int CharacterCount => Text.Length;
-        public int? UserId { get; set; }
+        
+        public int UserId { get; set; }
+        public User User { get; set; } = null!;
+        
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

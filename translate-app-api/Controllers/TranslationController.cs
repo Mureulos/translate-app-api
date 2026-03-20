@@ -1,10 +1,14 @@
-﻿using MediatR;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using translate_app.Api.Extensions;
 using translate_app.Application.UseCases.Translation.Entities.DTOs;
+using translate_app.application.UseCases.Translation.SaveTranslation;
 using translate_app.Application.UseCases.Translation.Translate;
 using translate_app.application.UseCases.Translation.TranslateFile;
+using translate_app.Domain.Entities.DTOs;
 
 namespace translate_app.Api.Controllers;
 
@@ -48,6 +52,18 @@ public class TranslationController: ControllerBase
 
         var translateResult = await _mediator.Send(new TranslateTextCommand(textDto), cancellationToken);
 
+        return this.ToActionResult(translateResult);
+    }
+
+    [Authorize] 
+    [HttpPost("save")]
+    public async Task<IActionResult> SaveTranslation([FromBody] SaveTranslationDto request, CancellationToken cancellationToken)
+    {
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            return Unauthorized();
+
+        var translateResult = await _mediator.Send(new SaveTranslationCommand(request, userId), cancellationToken); 
         return this.ToActionResult(translateResult);
     }
 }
