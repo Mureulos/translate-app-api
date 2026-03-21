@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using translate_app.Api.Extensions;
+using translate_app.application.UseCases.Translation.DeleteSavedTranslation;
 using translate_app.Application.UseCases.Translation.Entities.DTOs;
 using translate_app.application.UseCases.Translation.GetSavedTranslations;
 using translate_app.application.UseCases.Translation.SaveTranslation;
@@ -77,6 +78,18 @@ public class TranslationController: ControllerBase
             return Unauthorized();
 
         var translateResult = await _mediator.Send(new GetSavedTranslationsQuery(userId), cancellationToken); 
+        return this.ToActionResult(translateResult);
+    }
+    
+    [Authorize] 
+    [HttpDelete("save/{:id}")]
+    public async Task<IActionResult> GetSavedTranslations([FromQuery] int savedTranslationId, CancellationToken cancellationToken)
+    {
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            return Unauthorized();
+
+        var translateResult = await _mediator.Send(new DeleteSavedTranslationCommand(userId), cancellationToken); 
         return this.ToActionResult(translateResult);
     }
 }

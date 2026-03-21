@@ -23,11 +23,18 @@ public class TranslationRepository : ITranslationRepository
         return translation;
     }
     
-    public async Task<IEnumerable<Translation>> GetSavedTranslations(int userId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Translation>> GetSavedTranslations(int translationId, CancellationToken cancellationToken = default)
     {
         return await _context.Translation
             .AsNoTracking()
-            .Where(t => t.UserId == userId)
+            .Where(t => t.UserId == translationId)
             .ToListAsync(cancellationToken);
+    }
+    
+    public async Task DeleteSavedTranslations(int translationId, CancellationToken cancellationToken = default)
+    {
+        await _context.Users
+            .Where(u => u.Id == translationId)
+            .ExecuteDeleteAsync(cancellationToken);
     }
 }
