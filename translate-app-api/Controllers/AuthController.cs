@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using translate_app.Api.Extensions;
 using translate_app.Application.UseCases.Auth.Login;
 using translate_app.Application.UseCases.Auth.Logout;
-using translate_app.Application.UseCases.User.CreateUser;
+using translate_app.Application.UseCases.Auth.Signin;
 using translate_app.Domain.Entities.DTOs;
 
 namespace translate_app.Api.Controllers;

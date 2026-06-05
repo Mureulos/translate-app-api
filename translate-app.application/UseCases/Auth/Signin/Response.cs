@@ -1,10 +1,6 @@
-﻿/*
-    Response é o objeto de saída, retornado após o processamento.
-*/
+﻿using translate_app.Domain.Entities.Response;
 
-using translate_app.Application.UseCases.User.Entities.Response;
-
-namespace translate_app.Application.UseCases.User.CreateUser
+namespace translate_app.Application.UseCases.Auth.Signin
 {
-    public sealed record Response(UserResponse response);
+    public sealed record Response(AuthResponse response);
 }

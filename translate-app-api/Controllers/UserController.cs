@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using translate_app.Api.Extensions;
-using translate_app.Application.UseCases.User.CreateUser;
 using translate_app.Application.UseCases.User.DeleteUser;
 using translate_app.Application.UseCases.User.GetAllUsers;
 using translate_app.Application.UseCases.User.GetUserByEmail;
