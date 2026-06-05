@@ -93,9 +93,8 @@ namespace translate_app.Infrastructure.Migrations
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("DefaultLanguage")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("DefaultLanguage")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Email")
                         .IsRequired()

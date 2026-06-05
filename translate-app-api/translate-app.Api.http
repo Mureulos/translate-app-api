@@ -1,14 +1,101 @@
-﻿@translate-app.Api_HostAddress = https://localhost:7264
+﻿@host = https://localhost:7264/api
+@token = a
+@translation = translation
+@language = language
+@user = user
+@auth = auth
 
-POST {{translate-app.Api_HostAddress}}/api/translation/api/translate
+### TRANSLATION - Do a translation
+POST {{host}}/{{translation}}
 Content-Type: application/json
 
 {
-  //TranslationRequestDto
+  "text": "Olá, tudo bem?",
+  "targetLanguageId": 13,
+  "sourceLanguageId": 14
 }
 
-###
+### TRANSLATION - Translate from a file
+POST {{host}}/{{translation}}/from-file
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=boundary
 
-GET {{translate-app.Api_HostAddress}}/api/language
+--boundary
+Content-Disposition: form-data; name="targetLanguageId"
 
-###
+4
+--boundary
+Content-Disposition: form-data; name="sourceLanguageId"
+
+2
+--boundary
+Content-Disposition: form-data; name="file"; filename="arquivo.txt"
+Content-Type: text/plain
+
+Conteudo do seu arquivo de texto aqui.
+--boundary--
+
+### TRANSLATION - Save a translation
+POST {{host}}/{{translation}}/save
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "text": "Olá, tudo bem?",
+  "translationText": "Hello, how are you?",
+  "sourceLanguageId": 2,
+  "targetLanguageId": 4
+}
+
+### TRANSLATION - Get all saved translations
+GET {{host}}/{{translation}}/save
+Authorization: Bearer {{token}}
+
+### TRANSLATION - Delete a translation
+DELETE {{host}}/{{translation}}/save/1?savedTranslationId=1
+Authorization: Bearer {{token}}
+
+### LANGUAGE - Get all or one languages
+GET {{host}}/{{language}}
+
+### USER - Get all or one users
+GET {{host}}/{{user}}
+
+### USER - Create a user
+POST {{host}}/{{user}}
+Content-Type: application/json
+
+{
+  "name": "Murilin",
+  "lastName": "Murilão",
+  "email": "m@m.com",
+  "password": "abc123",
+  "defaultLanguage": "Português"
+}
+
+### USER - Update a user
+PUT {{host}}/{{user}}/5
+Content-Type: application/json
+
+{
+  "name": "Murilin",
+  "lastName": "Murilão",
+  "email": "m@m.com",
+  "password": "abc123",
+  "defaultLanguage": "Português"
+}
+
+### USER - Delete a user
+DELETE {{host}}/{{user}}/5
+
+### AUTH - Login
+POST {{host}}/{{auth}}/login
+Content-Type: application/json
+
+{
+  "email": "m@m.com",
+  "password": "abc123"
+}
+
+### AUTH - Logout
+POST {{host}}/{{auth}}/logout

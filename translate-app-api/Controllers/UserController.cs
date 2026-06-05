@@ -43,13 +43,6 @@ public class UserController : ControllerBase
         return this.ToActionResult(result);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] UserDto dto, CancellationToken cancellationToken)
-    {
-        var result = await _mediator.Send(new CreateUserCommand(dto), cancellationToken);
-        return this.ToActionResult(result);
-    }
-
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, [FromBody] UserDto dto, CancellationToken cancellationToken)
     {

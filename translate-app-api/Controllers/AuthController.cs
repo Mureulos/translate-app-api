@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using translate_app.Api.Extensions;
 using translate_app.Application.UseCases.Auth.Login;
 using translate_app.Application.UseCases.Auth.Logout;
+using translate_app.Application.UseCases.User.CreateUser;
 using translate_app.Domain.Entities.DTOs;
 
 namespace translate_app.Api.Controllers;
@@ -16,6 +17,15 @@ public class AuthController : ControllerBase
     public AuthController(IMediator mediator)
     {
         _mediator = mediator;
+    }
+    
+    [HttpPost("signin")]
+    public async Task<IActionResult> Signin([FromBody] UserDto dto, CancellationToken cancellationToken)
+    {
+        var command = new SiginCommand(dto);
+        
+        var result = await _mediator.Send(command, cancellationToken);
+        return this.ToActionResult(result);
     }
 
     [HttpPost("login")]

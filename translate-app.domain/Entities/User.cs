@@ -9,7 +9,7 @@ namespace translate_app.Domain.Entities
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
-        public string DefaultLanguage { get; set; } = string.Empty;
+        public int DefaultLanguage { get; set; }
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;
     }
 }

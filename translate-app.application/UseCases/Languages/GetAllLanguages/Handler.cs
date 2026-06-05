@@ -21,47 +21,20 @@ namespace translate_app.Application.UseCases.Languages.GetAllLanguages
         {
             cancellationToken.ThrowIfCancellationRequested();
             
-
             var allLanguages = await _languageRepository.GetAllLanguages(cancellationToken);
 
             if (allLanguages is null || !allLanguages.Any())
                 return Result.Failure<Response>(new Error("404", "Languages not found"));
 
-
-            var translationTasks = allLanguages.Select(async item =>
+            var responseList = allLanguages.Select(item => new LanguageResponse
             {
-                var localizedName = item.Name ?? string.Empty;
+                Id = item.Id,
+                Code = item.Code,
+                Name = item.Name ?? string.Empty,
+                LocalizedName = item.Name ?? string.Empty
+            }).ToArray();
 
-                if (!string.IsNullOrWhiteSpace(item.Name))
-                {
-                    try
-                    {
-                        var aiTranslation = await _aiService.TranslateAsync(item.Name, "English", item.Name, cancellationToken);
-
-                        if (!string.IsNullOrWhiteSpace(aiTranslation))
-                            localizedName = aiTranslation.Trim();
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        throw;
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }
-
-                return new LanguageResponse
-                {
-                    Id = item.Id,
-                    Code = item.Code,
-                    Name = item.Name ?? string.Empty,
-                    LocalizedName = localizedName
-                };
-            });
-
-            var translatedLanguages = (await Task.WhenAll(translationTasks)).ToArray();
-
-            return Result.Success(new Response(translatedLanguages));
+            return Result.Success(new Response(responseList));
         }
     }
 }

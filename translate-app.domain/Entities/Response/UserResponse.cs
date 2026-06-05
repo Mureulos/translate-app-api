@@ -15,7 +15,7 @@ namespace translate_app.Application.UseCases.User.Entities.Response
         [JsonIgnore]
         public string Role { get; set; } = string.Empty;
         
-        public string DefaultLanguage { get; set; } = string.Empty;
+        public int DefaultLanguage { get; set; }
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;
     }
 }

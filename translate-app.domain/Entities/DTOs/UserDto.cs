@@ -9,6 +9,6 @@ namespace translate_app.Domain.Entities.DTOs
         public string LastName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
-        public string DefaultLanguage { get; set; } = string.Empty;
+        public int DefaultLanguage { get; set; }
     }
 }
