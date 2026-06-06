@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace translate_app.Domain.Abstractions
+﻿namespace translate_app.Domain.Abstractions
 {
-    public record Error(string Code, string Message)
+    public enum ErrorType
     {
-        public static Error None = new(string.Empty, string.Empty);
-        public static Error NullValue = new("Error.NullValue", "A null value was provided.");
-        public static Error InvalidCredentials = new("Auth.InvalidCredentials", "Invalid credentials.");
+        Failure = 0,
+        Validation = 1,
+        NotFound = 2,
+        Conflict = 3,
+        Unauthorized = 4
+    }
+
+    public record Error(string Code, string Message, ErrorType Type = ErrorType.Failure)
+    {
+        public static readonly Error None = new(string.Empty, string.Empty, ErrorType.Failure);
+        public static readonly Error NullValue = new("Error.NullValue", "A null value was provided.", ErrorType.Failure);
+        public static readonly Error InvalidCredentials = new("Auth.InvalidCredentials", "Invalid credentials.", ErrorType.Unauthorized);
     }
 }

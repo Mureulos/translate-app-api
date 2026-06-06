@@ -18,7 +18,7 @@ namespace translate_app.Application.UseCases.User.DeleteUser
             cancellationToken.ThrowIfCancellationRequested();
 
             if (command.UserId <= 0)
-                return Result.Failure<Response>(new Error("400", "User id is required"));
+                return Result.Failure<Response>(new Error("User.NotFound", "User id not found", ErrorType.Validation));
 
             await _userRepository.DeleteUser(command.UserId, cancellationToken);
 

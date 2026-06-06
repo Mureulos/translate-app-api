@@ -19,12 +19,12 @@ namespace translate_app.Application.UseCases.User.GetUserById
             cancellationToken.ThrowIfCancellationRequested();
 
             if (command.UserId <= 0)
-                return Result.Failure<Response>(new Error("400", "User id is required"));
+                return Result.Failure<Response>(new Error("User.MissingData", "User id not found", ErrorType.Validation));
 
             var user = await _userRepository.GetUserById(command.UserId, cancellationToken);
 
             if (user == null)
-                return Result.Failure<Response>(new Error("404", "User not found"));
+                return Result.Failure<Response>(new Error("User.NotFound", "User not found", ErrorType.NotFound));
 
             var userResponse = new UserResponse
             {

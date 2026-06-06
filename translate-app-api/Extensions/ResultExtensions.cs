@@ -8,26 +8,27 @@ public static class ResultExtensions
     public static IActionResult ToActionResult<T>(this ControllerBase controller, Result<T> result)
     {
         if (result is null)
-            return controller.Problem(statusCode: StatusCodes.Status500InternalServerError, title: "Wrong answer from server");
+            return controller.Problem(statusCode: StatusCodes.Status500InternalServerError, title: "Server Error");
 
-        if (result.TryGetValue(out var value))
-            return controller.Ok(value);
+        if (result.IsSuccess)
+            return controller.Ok(result.Value);
 
-        var statusCode = MapStatusCode(result.Error);
+        var statusCode = MapStatusCode(result.Error.Type);
 
         return controller.Problem(
             statusCode: statusCode,
-            title: "Failed on requesition",
+            title: "Request Failed",
             detail: result.Error.Message,
             type: result.Error.Code
         );
     }
 
-    private static int MapStatusCode(Error error)
+    private static int MapStatusCode(ErrorType errorType) => errorType switch
     {
-        if (error is null)
-            return StatusCodes.Status500InternalServerError;
-
-        return int.TryParse(error.Code, out var status) ? status : StatusCodes.Status400BadRequest;
-    }
+        ErrorType.Validation => StatusCodes.Status400BadRequest,
+        ErrorType.NotFound => StatusCodes.Status404NotFound,
+        ErrorType.Conflict => StatusCodes.Status409Conflict,
+        ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
+        _ => StatusCodes.Status500InternalServerError
+    };
 }

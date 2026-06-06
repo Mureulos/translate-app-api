@@ -21,7 +21,7 @@ namespace translate_app.Application.UseCases.User.GetAllUsers
             var users = await _userRepository.GetAllUsers(cancellationToken);
 
             if (users is null || !users.Any())
-                return Result.Failure<Response>(new Error("400", "User not found"));
+                return Result.Failure<Response>(new Error("User.NotFound", "User not found", ErrorType.NotFound));
 
             var usersResponse = users
                 .Select(u => new UserResponse

@@ -23,7 +23,7 @@ public sealed class Handler : IRequestHandler<UpdateUserCommand, Result<Response
         cancellationToken.ThrowIfCancellationRequested();
 
         if (command.Dto is null)
-            return Result.Failure<Response>(new Error("400", "Data not found"));
+            return Result.Failure<Response>(new Error("User.MissingData", "Data not found", ErrorType.Validation));
 
         if (!string.IsNullOrWhiteSpace(command.Dto.Password))
             command.Dto.Password = _passwordHasher.Hash(command.Dto.Password);
@@ -33,7 +33,7 @@ public sealed class Handler : IRequestHandler<UpdateUserCommand, Result<Response
         var user = await _userRepository.UpdateUser(command.Id, command.Dto, cancellationToken);
 
         if (user is null)
-            return Result.Failure<Response>(new Error("404", "User not found"));
+            return Result.Failure<Response>(new Error("User.NotFound", "User id not found", ErrorType.Validation));
 
         var userResponse = new UserResponse
         {
