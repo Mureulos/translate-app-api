@@ -18,7 +18,8 @@ namespace translate_app.application.UseCases.Translation.TranslateFile
             var uploadFileResult = await _extractTextFromFileService.ExtractFileAsync(command.File);
             
             if (!uploadFileResult.Success)
-                return Result.Failure<Response>(new Error("Upload.Failed", uploadFileResult.ErrorMessage));
+                return Result.Failure<Response>(new Error("Upload.Failed", uploadFileResult.ErrorMessage, ErrorType.NotFound));
+            
             
             return Result.Success(new Response(uploadFileResult));
         }

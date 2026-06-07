@@ -28,7 +28,7 @@ namespace translate_app.Application.UseCases.Auth.Signin
             cancellationToken.ThrowIfCancellationRequested();
 
             if (command.Dto is null)
-                return Result.Failure<Response>(new Error("400", "Data not found"));
+                return Result.Failure<Response>(new Error("Sigin.DataMissing", "Data missing", ErrorType.NotFound));
 
             if (!string.IsNullOrWhiteSpace(command.Dto.Password))
                 command.Dto.Password = _passwordHasher.Hash(command.Dto.Password);
@@ -39,12 +39,12 @@ namespace translate_app.Application.UseCases.Auth.Signin
                 .Result?.Id ?? 0;
 
             if (defaultLanguage == 0)
-                return Result.Failure<Response>(new Error("400", "Language not found"));
+                return Result.Failure<Response>(new Error("Language.SourceNotFound", "Source language not found", ErrorType.NotFound));
 
             var user = await _userRepository.CreateUser(command.Dto, cancellationToken);
 
             if (user is null)
-                return Result.Failure<Response>(new Error("404", "User not found"));
+                return Result.Failure<Response>(new Error("User.NotFound", "use not found", ErrorType.NotFound));
 
             var token = _tokenService.Create(user);
 

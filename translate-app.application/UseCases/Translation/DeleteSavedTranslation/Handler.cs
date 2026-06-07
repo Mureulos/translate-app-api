@@ -19,7 +19,7 @@ public sealed class Handler: IRequestHandler<DeleteSavedTranslationCommand, Resu
         cancellationToken.ThrowIfCancellationRequested();
             
         if (command.savedTranslationId <= 0)
-            return Result.Failure<Response>(new Error("400", "Id is required"));
+            return Result.Failure<Response>(new Error("Translation.NotFound", "Translation not found", ErrorType.NotFound));
 
         await _translationRepository.DeleteSavedTranslations(command.savedTranslationId, cancellationToken);
         

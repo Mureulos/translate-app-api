@@ -20,10 +20,10 @@ public sealed class Handler : IRequestHandler<SaveTranslationCommand, Result<Res
         cancellationToken.ThrowIfCancellationRequested();
 
         if (command?.Dto is null)
-            return Result.Failure<Response>(new Error("400", "Translation data is required"));
+            return Result.Failure<Response>(new Error("Translation.MissingData", "Translation data is required", ErrorType.Validation));
 
         if (string.IsNullOrWhiteSpace(command.Dto.Text) || string.IsNullOrWhiteSpace(command.Dto.TranslationText))
-            return Result.Failure<Response>(new Error("400", "Text and translation text are required"));
+            return Result.Failure<Response>(new Error("Translation.InvalidText", "Text and translation text are required", ErrorType.Validation));
 
         var translation = new Domain.Entities.Translation
         {

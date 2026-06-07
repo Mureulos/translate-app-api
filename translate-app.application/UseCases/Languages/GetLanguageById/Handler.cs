@@ -25,7 +25,7 @@ namespace translate_app.Application.UseCases.Languages.GetLanguageById
             var response = await _languageRepository.GetLanguageById(query.IdLanguage, cancellationToken);
 
             if (response is null)
-                return Result.Failure<Response>(new Error("404", "Language not found"));
+                return Result.Failure<Response>(new Error("Language.SourceNotFound", "Source language not found", ErrorType.NotFound));
 
             var localizedName = response.Name ?? string.Empty;
 

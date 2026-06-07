@@ -31,21 +31,19 @@ namespace translate_app.Application.UseCases.Translation.Translate
                 sourceLanguage = await _languageRepository.GetLanguageById(textCommand.Dto.SourceLanguageId.Value, cancellationToken);
 
                 if (sourceLanguage == null)
-                    return Result.Failure<Response>(new Error("404", "Source language not found"));
+                    return Result.Failure<Response>(new Error("Language.SourceNotFound", "Source language not found", ErrorType.NotFound));
             }
-
 
             var targetLanguage = await _languageRepository.GetLanguageById(textCommand.Dto.TargetLanguageId, cancellationToken);
 
             if (targetLanguage == null)
-                return Result.Failure<Response>(new Error("404", "Target language not found"));
+                return Result.Failure<Response>(new Error("Language.TargetNotFound", "Target language not found", ErrorType.NotFound));
 
             if (string.IsNullOrEmpty(textCommand.Dto.Text))
-                return Result.Failure<Response>(new Error("400", "dto text cannot be null or empty"));
+                return Result.Failure<Response>(new Error("Translation.EmptyText", "Text cannot be null or empty", ErrorType.Validation));
 
             if (textCommand.Dto.Text.Length > _charactersLimit)
-                return Result.Failure<Response>(new Error("400", $"Your dto text cannot have more than {300} characters"));
-
+                return Result.Failure<Response>(new Error("Translation.TextTooLong", $"Your text cannot have more than {_charactersLimit} characters", ErrorType.Validation));
 
             var translation = await _aiService.TranslateAsync(
                 textCommand.Dto.Text,
@@ -55,8 +53,7 @@ namespace translate_app.Application.UseCases.Translation.Translate
             );
 
             if (translation == null)
-                return Result.Failure<Response>(new Error("400", "Cannot make the translation"));
-
+                return Result.Failure<Response>(new Error("Translation.Failed", "Cannot make the translation", ErrorType.Failure));
 
             var translationDto = new Domain.Entities.Translation
             {
