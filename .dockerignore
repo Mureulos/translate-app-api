@@ -1,0 +1,17 @@
+.dockerignore
+.env
+.git
+.gitignore
+.idea
+.vs
+.vscode
+bin/
+obj/
+translate-app-api/bin/
+translate-app-api/obj/
+translate-app.domain/bin/
+translate-app.domain/obj/
+translate-app.application/bin/
+translate-app.application/obj/
+translate-app.Infrastructure/bin/
+translate-app.Infrastructure/obj/
