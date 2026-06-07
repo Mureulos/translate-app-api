@@ -28,31 +28,39 @@ namespace translate_app.Application.UseCases.Auth.Signin
             cancellationToken.ThrowIfCancellationRequested();
 
             if (command.Dto is null)
-                return Result.Failure<Response>(new Error("Sigin.DataMissing", "Data missing", ErrorType.NotFound));
+                return Result.Failure<Response>(new Error("Sigin.DataMissing", "Data missing", ErrorType.Validation));
 
-            if (!string.IsNullOrWhiteSpace(command.Dto.Password))
-                command.Dto.Password = _passwordHasher.Hash(command.Dto.Password);
-            else
-                command.Dto.Password = "";
+            if (string.IsNullOrWhiteSpace(command.Dto.Email))
+                return Result.Failure<Response>(new Error("Auth.EmailMissing", "Email is required",
+                    ErrorType.Validation));
 
-            int defaultLanguage = _languageRepository.GetLanguageById(command.Dto.DefaultLanguage, cancellationToken)
-                .Result?.Id ?? 0;
+            if (string.IsNullOrWhiteSpace(command.Dto.Password))
+                return Result.Failure<Response>(new Error("Auth.PasswordMissing", "Password is required",
+                    ErrorType.Validation));
 
-            if (defaultLanguage == 0)
-                return Result.Failure<Response>(new Error("Language.SourceNotFound", "Source language not found", ErrorType.NotFound));
+            command.Dto.Email = command.Dto.Email.Trim().ToLower();
+
+            var existingUser = await _userRepository.GetUserByEmail(command.Dto.Email, cancellationToken);
+
+            if (existingUser is not null)
+                return Result.Failure<Response>(new Error("Auth.EmailConflict", "This email is already in use",
+                    ErrorType.Conflict));
+
+            command.Dto.Password = _passwordHasher.Hash(command.Dto.Password);
+
+            var language = await _languageRepository.GetLanguageById(command.Dto.DefaultLanguage, cancellationToken);
+
+            if (language is null)
+                return Result.Failure<Response>(new Error("Language.NotFound", "Default language not found",
+                    ErrorType.NotFound));
 
             var user = await _userRepository.CreateUser(command.Dto, cancellationToken);
 
             if (user is null)
-                return Result.Failure<Response>(new Error("User.NotFound", "use not found", ErrorType.NotFound));
+                return Result.Failure<Response>(new Error("User.CreationFailed", "Failed to create user",
+                    ErrorType.Failure));
 
             var token = _tokenService.Create(user);
-
-            var response = new AuthResponse(
-                Token: token,
-                Email: user.Email,
-                UserName: user.Name
-            );
 
             var authResponse = new AuthResponse(
                 Token: token,

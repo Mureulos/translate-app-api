@@ -21,7 +21,7 @@ public sealed class Handler : IRequestHandler<GetSavedTranslationsQuery, Result<
         var allSaves = await _translationRepository.GetSavedTranslations(query.userId, cancellationToken);
         
         if (allSaves is null || !allSaves.Any())
-            return Result.Failure<Response>(new Error("Translation.NotFound", "Translations not saved yet", ErrorType.NotFound));
+            return Result.Success(new Response(Array.Empty<SavedTranslationResponse>()));
 
         var savedTranslations = allSaves.Select(item => new SavedTranslationResponse 
         {

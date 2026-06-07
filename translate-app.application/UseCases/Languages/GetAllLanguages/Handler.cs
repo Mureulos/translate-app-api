@@ -24,7 +24,7 @@ namespace translate_app.Application.UseCases.Languages.GetAllLanguages
             var allLanguages = await _languageRepository.GetAllLanguages(cancellationToken);
 
             if (allLanguages is null || !allLanguages.Any())
-            return Result.Failure<Response>(new Error("Language.SourceNotFound", "Source language not found", ErrorType.NotFound));
+                return Result.Success(new Response(Array.Empty<LanguageResponse>()));
 
             var responseList = allLanguages.Select(item => new LanguageResponse
             {
