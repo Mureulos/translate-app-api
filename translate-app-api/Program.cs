@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using DotNetEnv;
 using translate_app.application;
 using translate_app.Domain.Repositories;
 using translate_app.Domain.Services;
@@ -9,7 +10,10 @@ using translate_app.Infrastructure.Data;
 using translate_app.Infrastructure.Repositories;
 using translate_app.Infrastructure.Services;
 
+Env.Load();
+
 var builder = WebApplication.CreateBuilder(args);
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
@@ -17,7 +21,6 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connect
 builder.Configuration
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
-    .AddUserSecrets<Program>(optional: true)
     .AddEnvironmentVariables();
 
 builder.Services.AddApplication();
