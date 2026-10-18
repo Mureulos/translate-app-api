@@ -2,6 +2,11 @@ namespace translate_app.Domain.Services;
 
 public interface ISmartTranslationService
 {
+    Task<string> TranslateAsync(
+        SmartTranslationRequest request,
+        string? sourceLanguage = null,
+        CancellationToken cancellationToken = default);
+
     Task InvalidateCacheAsync(
         SmartTranslationRequest request,
         CancellationToken cancellationToken = default);

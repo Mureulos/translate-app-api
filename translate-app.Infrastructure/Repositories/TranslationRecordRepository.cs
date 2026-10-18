@@ -31,6 +31,19 @@ public sealed class TranslationRecordRepository(AppDbContext context)
         TranslationMemoryIdentity identity,
         string translatedText,
         CancellationToken cancellationToken = default)
+        => await CreateAsync(identity, translatedText, true, cancellationToken);
+
+    public async Task<TranslationRecord> CreateAutomaticAsync(
+        TranslationMemoryIdentity identity,
+        string translatedText,
+        CancellationToken cancellationToken = default)
+        => await CreateAsync(identity, translatedText, false, cancellationToken);
+
+    private async Task<TranslationRecord> CreateAsync(
+        TranslationMemoryIdentity identity,
+        string translatedText,
+        bool isHumanVerified,
+        CancellationToken cancellationToken)
     {
         var record = new TranslationRecord
         {
@@ -38,7 +51,7 @@ public sealed class TranslationRecordRepository(AppDbContext context)
             TargetLanguage = identity.TargetLanguage,
             ContextTag = identity.ContextTag,
             TranslatedText = translatedText.Trim(),
-            IsHumanVerified = true,
+            IsHumanVerified = isHumanVerified,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };

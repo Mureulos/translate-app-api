@@ -18,6 +18,11 @@ public interface ITranslationRecordRepository
         string translatedText,
         CancellationToken cancellationToken = default);
 
+    Task<TranslationRecord> CreateAutomaticAsync(
+        TranslationMemoryIdentity identity,
+        string translatedText,
+        CancellationToken cancellationToken = default);
+
     Task<TranslationRecord?> UpdateHumanVerifiedAsync(
         int id,
         TranslationMemoryIdentity identity,

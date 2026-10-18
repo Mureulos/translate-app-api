@@ -33,6 +33,7 @@ namespace translate_app.Infrastructure
                     ?? throw new InvalidOperationException("Redis:ConnectionString must be configured.");
             });
             services.AddSingleton<ITranslationCache, RedisTranslationCache>();
+            services.AddScoped<ISmartTranslationService, SmartTranslationService>();
 
             return services;
         }
