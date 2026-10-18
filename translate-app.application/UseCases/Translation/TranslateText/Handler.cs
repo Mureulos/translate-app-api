@@ -6,20 +6,22 @@ using MediatR;
 using translate_app.Domain.Entities;
 using translate_app.Domain.Abstractions;
 using translate_app.Domain.Repositories;
-using translate_app.Infrastructure.Services;
+using translate_app.Domain.Services;
 
 namespace translate_app.Application.UseCases.Translation.Translate
 {
     public sealed class Handler: IRequestHandler<TranslateTextCommand, Result<Response>>
     {
         private readonly ILanguageRepository _languageRepository;
-        private readonly AIService _aiService;
+        private readonly ISmartTranslationService _translationService;
         private int _charactersLimit = 300;
 
-        public Handler(ILanguageRepository languageRepository, AIService aiService)
+        public Handler(
+            ILanguageRepository languageRepository,
+            ISmartTranslationService translationService)
         {
             _languageRepository = languageRepository;
-            _aiService = aiService;
+            _translationService = translationService;
         }
 
         public async Task<Result<Response>> Handle(TranslateTextCommand textCommand, CancellationToken cancellationToken)
@@ -45,12 +47,16 @@ namespace translate_app.Application.UseCases.Translation.Translate
             if (textCommand.Dto.Text.Length > _charactersLimit)
                 return Result.Failure<Response>(new Error("Translation.TextTooLong", $"Your text cannot have more than {_charactersLimit} characters", ErrorType.Validation));
 
-            var translation = await _aiService.TranslateAsync(
-                textCommand.Dto.Text,
-                targetLanguage.Name,
+            if (textCommand.Dto.ContextTag?.Length > 100)
+                return Result.Failure<Response>(new Error("Translation.ContextTooLong", "Context cannot have more than 100 characters", ErrorType.Validation));
+
+            var translation = await _translationService.TranslateAsync(
+                new SmartTranslationRequest(
+                    textCommand.Dto.Text,
+                    targetLanguage.Name,
+                    textCommand.Dto.ContextTag ?? "general"),
                 sourceLanguage?.Name,
-                cancellationToken
-            );
+                cancellationToken);
 
             if (translation == null)
                 return Result.Failure<Response>(new Error("Translation.Failed", "Cannot make the translation", ErrorType.Failure));

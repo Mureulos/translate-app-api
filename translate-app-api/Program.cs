@@ -4,25 +4,20 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using DotNetEnv;
 using translate_app.application;
-using translate_app.Domain.Repositories;
 using translate_app.Domain.Services;
-using translate_app.Infrastructure.Data;
-using translate_app.Infrastructure.Repositories;
 using translate_app.Infrastructure.Services;
+using translate_app.Infrastructure;
 
 Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
-
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
 builder.Configuration
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
     .AddEnvironmentVariables();
 
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -58,11 +53,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 
 builder.Services.AddControllers();
-
-builder.Services.AddScoped<ILanguageRepository, LanguageRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<ITranslationRepository, TranslationRepository>();
-builder.Services.AddScoped<ITranslationRecordRepository, TranslationRecordRepository>();
 
 builder.Services.AddScoped<IUploadFile, UploadFile>();
 builder.Services.AddSingleton<IOcrService, OcrService>();

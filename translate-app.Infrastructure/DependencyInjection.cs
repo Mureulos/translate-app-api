@@ -2,8 +2,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using translate_app.Domain.Repositories;
+using translate_app.Domain.Services;
 using translate_app.Infrastructure.Data;
 using translate_app.Infrastructure.Repositories;
+using translate_app.Infrastructure.Services;
 
 namespace translate_app.Infrastructure
 {
@@ -22,6 +24,16 @@ namespace translate_app.Infrastructure
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<ITranslationRepository, TranslationRepository>();
             services.AddTransient<ITranslationRecordRepository, TranslationRecordRepository>();
+
+            services.Configure<TranslationCacheOptions>(
+                configuration.GetSection(TranslationCacheOptions.SectionName));
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = configuration["Redis:ConnectionString"]
+                    ?? throw new InvalidOperationException("Redis:ConnectionString must be configured.");
+            });
+            services.AddSingleton<ITranslationCache, RedisTranslationCache>();
+            services.AddScoped<ISmartTranslationService, SmartTranslationService>();
 
             return services;
         }
