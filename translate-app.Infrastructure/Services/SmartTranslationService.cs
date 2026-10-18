@@ -36,7 +36,8 @@ public sealed class SmartTranslationService(
             request.SourceText,
             request.TargetLanguage,
             sourceLanguage,
-            cancellationToken);
+            cancellationToken,
+            request.ContextTag);
 
         if (string.IsNullOrWhiteSpace(translatedText))
             throw new InvalidOperationException("The translation provider returned an empty result.");

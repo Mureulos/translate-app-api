@@ -6,5 +6,6 @@ public interface IAIService
         string text,
         string targetLanguage,
         string? sourceLanguage = null,
-        CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default,
+        string? contextTag = null);
 }
