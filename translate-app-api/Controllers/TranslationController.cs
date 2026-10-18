@@ -38,6 +38,7 @@ public class TranslationController: ControllerBase
         IFormFile file, 
         [FromForm] int targetLanguageId, 
         [FromForm] int? sourceLanguageId, 
+        [FromForm] string? contextTag,
         CancellationToken cancellationToken)
     {
         var extractResult = await _mediator.Send(new ExtractTextFromFileCommand(file), cancellationToken);
@@ -49,7 +50,8 @@ public class TranslationController: ControllerBase
         {
             Text = extractResult.Value.response.ExtractedContent,
             SourceLanguageId = sourceLanguageId,
-            TargetLanguageId = targetLanguageId
+            TargetLanguageId = targetLanguageId,
+            ContextTag = contextTag ?? "general"
         };
 
         var translateResult = await _mediator.Send(new TranslateTextCommand(textDto), cancellationToken);

@@ -47,11 +47,14 @@ namespace translate_app.Application.UseCases.Translation.Translate
             if (textCommand.Dto.Text.Length > _charactersLimit)
                 return Result.Failure<Response>(new Error("Translation.TextTooLong", $"Your text cannot have more than {_charactersLimit} characters", ErrorType.Validation));
 
+            if (textCommand.Dto.ContextTag?.Length > 100)
+                return Result.Failure<Response>(new Error("Translation.ContextTooLong", "Context cannot have more than 100 characters", ErrorType.Validation));
+
             var translation = await _translationService.TranslateAsync(
                 new SmartTranslationRequest(
                     textCommand.Dto.Text,
                     targetLanguage.Name,
-                    "general"),
+                    textCommand.Dto.ContextTag ?? "general"),
                 sourceLanguage?.Name,
                 cancellationToken);
 
