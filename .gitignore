@@ -364,3 +364,9 @@ FodyWeavers.xsd
 
 # Env Variables
 .env
+
+# JetBrains Rider
+.idea/
+
+# Local HTTP client environment files
+**/http-client.env.json
