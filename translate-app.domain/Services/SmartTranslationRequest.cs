@@ -8,11 +8,14 @@ public sealed record SmartTranslationRequest(
     public TranslationMemoryIdentity ToIdentity() => new(
         Normalize(SourceText),
         Normalize(TargetLanguage),
-        Normalize(ContextTag));
+        NormalizeContext(ContextTag));
 
-    private static string Normalize(string value) =>
+    public static string Normalize(string value) =>
         string.Join(' ', value.Trim().Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries))
             .ToLowerInvariant();
+
+    public static string NormalizeContext(string value) =>
+        string.IsNullOrWhiteSpace(value) ? "general" : Normalize(value);
 }
 
 public sealed record TranslationMemoryIdentity(

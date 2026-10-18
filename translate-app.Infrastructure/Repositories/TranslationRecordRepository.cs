@@ -90,16 +90,19 @@ public sealed class TranslationRecordRepository(AppDbContext context)
         var records = context.TranslationRecords.AsNoTracking().AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(targetLanguage))
-            records = records.Where(record => record.TargetLanguage == targetLanguage.Trim().ToLower());
+            records = records.Where(record =>
+                record.TargetLanguage == SmartTranslationRequest.Normalize(targetLanguage));
 
         if (!string.IsNullOrWhiteSpace(contextTag))
-            records = records.Where(record => record.ContextTag == contextTag.Trim().ToLower());
+            records = records.Where(record =>
+                record.ContextTag == SmartTranslationRequest.NormalizeContext(contextTag));
 
         if (isHumanVerified.HasValue)
             records = records.Where(record => record.IsHumanVerified == isHumanVerified.Value);
 
         if (!string.IsNullOrWhiteSpace(query))
-            records = records.Where(record => record.NormalizedSource.Contains(query.Trim().ToLower()));
+            records = records.Where(record =>
+                record.NormalizedSource.Contains(SmartTranslationRequest.Normalize(query)));
 
         return await records
             .OrderByDescending(record => record.IsHumanVerified)

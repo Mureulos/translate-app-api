@@ -82,6 +82,60 @@ namespace translate_app.Infrastructure.Migrations
                     b.ToTable("Translation");
                 });
 
+            modelBuilder.Entity("translate_app.Domain.Entities.TranslationRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ContextTag")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW()");
+
+                    b.Property<bool>("IsHumanVerified")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("NormalizedSource")
+                        .IsRequired()
+                        .HasMaxLength(600)
+                        .HasColumnType("character varying(600)");
+
+                    b.Property<string>("TargetLanguage")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("TranslatedText")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW()");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsHumanVerified");
+
+                    b.HasIndex("TargetLanguage", "ContextTag");
+
+                    b.HasIndex("NormalizedSource", "TargetLanguage", "ContextTag")
+                        .IsUnique();
+
+                    b.ToTable("TranslationRecords", (string)null);
+                });
+
             modelBuilder.Entity("translate_app.Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")
