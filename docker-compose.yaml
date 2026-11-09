@@ -1,0 +1,50 @@
+﻿services:
+  translate-app.api:
+    image: translate-app.api
+    build:
+      context: .
+      dockerfile: translate-app-api/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - redis
+      - ollama
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=translate_app_db;Username=admin;Password=admin
+      - ConnectionStrings__Redis=redis:6379
+      - OllamaSettings__BaseUrl=http://ollama:11434
+      - Jwt__Key=SuaChaveSecretaSuperSeguraComPeloMenos32Caracteres
+      - Jwt__Issuer=SeuIssuer
+      - Jwt__Audience=SuaAudience
+
+  redis:
+    image: redis:latest
+    container_name: translate-app-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: translate-app-ollama
+    ports:
+      - "11434:11434"
+
+  postgres:
+    image: postgres:16
+    container_name: translate-app-postgres
+    environment:
+      POSTGRES_DB: translate_app_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./init-db:/docker-entrypoint-initdb.d:ro
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+  redis_data:
