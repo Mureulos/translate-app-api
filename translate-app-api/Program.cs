@@ -7,6 +7,7 @@ using translate_app.application;
 using translate_app.Domain.Services;
 using translate_app.Infrastructure.Services;
 using translate_app.Infrastructure;
+using translate_app.Infrastructure.Data;
 
 Env.Load();
 
@@ -72,6 +73,22 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    dbContext.Database.Migrate();
+
+    if (!dbContext.Languages.Any())
+    {
+        var sqlFile = Path.Combine(app.Environment.ContentRootPath, "init-db", "init-languages.sql");
+        if (File.Exists(sqlFile))
+        {
+            var sql = File.ReadAllText(sqlFile);
+            dbContext.Database.ExecuteSqlRaw(sql);
+        }
+    }
+}
 
 app.UseHttpsRedirection();
 
