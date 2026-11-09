@@ -34,6 +34,7 @@ namespace translate_app.Infrastructure
             });
             services.AddSingleton<ITranslationCache, RedisTranslationCache>();
             services.AddScoped<ISmartTranslationService, SmartTranslationService>();
+            services.AddScoped<IAIService, AIService>();
 
             return services;
         }
