@@ -22,4 +22,5 @@ RUN dotnet publish "translate-app.Api.csproj" -c Release -o /app/publish /p:UseA
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY --from=build /src/init-db ./init-db
 ENTRYPOINT ["dotnet", "translate-app.Api.dll"]

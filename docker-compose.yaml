@@ -1,0 +1,62 @@
+﻿services:
+  translate-app.api:
+    image: translate-app.api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      ollama:
+        condition: service_started
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=translate_app_db;Username=admin;Password=admin
+      - ConnectionStrings__Redis=redis:6379
+      - Ollama:Url=http://ollama:11434
+      - Jwt__Key=SuaChaveSecretaSuperSeguraComPeloMenos32Caracteres
+      - Jwt__Issuer=SeuIssuer
+      - Jwt__Audience=SuaAudience
+      - Jwt__ExpirationInMinutes=60
+
+  redis:
+    image: redis:latest
+    container_name: translate-app-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: translate-app-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+
+  postgres:
+    image: postgres:16
+    container_name: translate-app-postgres
+    environment:
+      POSTGRES_DB: translate_app_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d translate_app_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+  redis_data:
+  ollama_data:

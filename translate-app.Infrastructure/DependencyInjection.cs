@@ -29,11 +29,11 @@ namespace translate_app.Infrastructure
                 configuration.GetSection(TranslationCacheOptions.SectionName));
             services.AddStackExchangeRedisCache(options =>
             {
-                options.Configuration = configuration["Redis:ConnectionString"]
-                    ?? throw new InvalidOperationException("Redis:ConnectionString must be configured.");
+                options.Configuration = configuration["ConnectionStrings:Redis"];
             });
             services.AddSingleton<ITranslationCache, RedisTranslationCache>();
             services.AddScoped<ISmartTranslationService, SmartTranslationService>();
+            services.AddScoped<IAIService, AIService>();
 
             return services;
         }
